@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 
+import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
@@ -18,7 +19,13 @@ export default class ClientMainDailyInputs extends Component {
 								type='number'
 								autoComplete='145'
 								margin='normal'
+								required
 							/>
+							<CardActions>
+								<Button variant='contained' color='primary'>
+									Submit
+								</Button>
+							</CardActions>
 						</form>
 						<form className='client-landing-daily-inputs--right'>
 							<TextField
@@ -26,31 +33,36 @@ export default class ClientMainDailyInputs extends Component {
 								type='number'
 								autoComplete='145'
 								margin='normal'
+								required
 							/>
 							<TextField
 								label='Protein'
 								type='number'
 								autoComplete='145'
 								margin='normal'
+								required
 							/>
 							<TextField
 								label='Fat'
 								type='number'
 								autoComplete='57'
 								margin='normal'
+								required
 							/>
 							<TextField
 								label='Fiber'
 								type='number'
 								autoComplete='25'
 								margin='normal'
+								required
 							/>
 							<TextField
 								label='Exercise'
 								type='text'
 								margin='normal'
 								multiline
-								rows='4'
+								rows='2'
+								required
 							/>
 							<TextField
 								label='Notes'
@@ -59,6 +71,11 @@ export default class ClientMainDailyInputs extends Component {
 								multiline
 								rows='4'
 							/>
+							<CardActions>
+								<Button variant='contained' color='primary'>
+									Submit
+								</Button>
+							</CardActions>
 						</form>
 					</div>
 				</CardContent>

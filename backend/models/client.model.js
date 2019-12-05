@@ -16,9 +16,9 @@ const userSchema = new Schema(
 		dob: { type: Date, required: true },
 		phone: { type: Number, required: true },
 		email: { type: String, required: true },
-		checkinday: { type: Date, required: true },
-		monthlycheckin: { type: Date, required: true },
-		coachid: { type: String, required: true },
+		checkinday: { type: String, required: true },
+		monthlycheckin: { type: Number, required: true },
+		coach: { type: String, required: true },
 	},
 	{
 		timestamps: true,
