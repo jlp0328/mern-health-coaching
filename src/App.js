@@ -52,20 +52,25 @@ class App extends Component {
     super(props);
 
     this.state = {
-      client: {}
+      personal: {},
+      goals: {}
     };
   }
   async componentDidMount() {
     try {
-      const clientInfo = await axios.get(
+      const getClientInfo = axios.get(
         "http://10.0.1.3:5000/clients/5de929b2daf74a9981968987"
       );
 
-      this.setState({
-        client: clientInfo.data
-      });
+      const getClientGoals = axios.get(
+        "http://10.0.1.3:5000/clients/goals/5de92ab896558099cbcdbdde"
+      );
 
-      console.log(this.state.client);
+      const clientInfo = await axios.all([getClientInfo, getClientGoals]);
+      this.setState({
+        personal: clientInfo[0].data,
+        goals: clientInfo[1].data
+      });
     } catch (error) {
       console.log(error);
     }
@@ -80,7 +85,7 @@ class App extends Component {
             <Route
               exact
               path="/"
-              render={props => <ClientMain client={this.state.client} />}
+              render={props => <ClientMain client={this.state} />}
             />
             <Route path="/profile" component={Profile} />
             <Route path="/weight" component={Weight} />

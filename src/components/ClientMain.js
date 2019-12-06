@@ -28,8 +28,8 @@ export default class ClientMain extends Component {
     return (
       <Paper className="" square={false}>
         <h1>Main Page</h1>
-        <ClientMainSummaryCard client={this.state.client} />
-        <ClientMainDailyInputs client={this.state.client} />
+        <ClientMainSummaryCard client={this.state.client.goals} />
+        <ClientMainDailyInputs client={this.state.client.personal} />
       </Paper>
     );
   }

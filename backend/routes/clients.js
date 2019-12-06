@@ -16,9 +16,9 @@ router.route("/:id").get((req, res) => {
     .catch(err => res.status(400).json("Error: " + err));
 });
 
-//Get client goals based on id
-router.route("/goals/:id").get((req, res) => {
-  Goals.findOne({ user: req.params.id })
+//Get client goals based on user id
+router.route("/goals/:user").get((req, res) => {
+  Goals.findOne({ user: req.params.user })
     .then(client => res.json(client))
     .catch(err => res.status(400).json("Error: " + err));
 });

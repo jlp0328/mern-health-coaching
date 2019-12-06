@@ -15,6 +15,9 @@ export default class ClientMainDailyInputs extends Component {
       client: this.props.client
     };
   }
+
+  submitWeight = () => {};
+
   render() {
     return (
       <Card>

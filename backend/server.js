@@ -25,10 +25,10 @@ connection.on("error", err => {
   console.error("Error: ", err);
 });
 
-// const exercisesRouter = require('./routes/exercises');
+const weightRouter = require("./routes/weight");
 const clientsRouter = require("./routes/clients");
 
-// app.use('/exercises', exercisesRouter);
+app.use("/weight", weightRouter);
 app.use("/clients", clientsRouter);
 
 app.listen(port, () => {
