@@ -19,15 +19,9 @@ router.route("/:user").get((req, res) => {
 router.route("/daily-log").post((req, res) => {
   const data = req.body;
 
-  const entryDate = data.date === undefined ? new Date() : data.date;
+  data.date = undefined ? new Date() : data.date;
 
-  const weightEntry = {
-    user: data.user,
-    date: entryDate,
-    weight: data.weight
-  };
-
-  const newEntry = new Weight(weightEntry);
+  const newEntry = new Weight(data);
 
   newEntry
     .save()

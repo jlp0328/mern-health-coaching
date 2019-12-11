@@ -3,30 +3,40 @@
         "name": "carbs",
         "label": "Carbs",
         "type": "text",
+        "inputProps": {
+            "minLength": 2,
+            "maxLength": 5
+        },
         "required": true
     },
     {
         "name": "protein",
         "label": "Protein",
         "type": "text",
+        "inputProps": {
+            "minLength": 2,
+            "maxLength": 5
+        },
         "required": true
     },
     {
         "name": "fat",
         "label": "Fat",
         "type": "text",
+        "inputProps": {
+            "minLength": 2,
+            "maxLength": 5
+        },
         "required": true
     },
     {
         "name": "fiber",
         "label": "Fiber",
         "type": "text",
-        "required": true
-    },
-    {
-        "name": "exercise-minutes",
-        "label": "Exercise Minutes",
-        "type": "text",
+        "inputProps": {
+            "minLength": 2,
+            "maxLength": 5
+        },
         "required": true
     }
 ]

@@ -1,0 +1,32 @@
+[
+    {
+        "name": "exercise-minutes",
+        "label": "Exercise Minutes",
+        "type": "text",
+        "inputProps": {
+            "minLength": 2,
+            "maxLength": 5
+        },
+        "required": true,
+        "multiline": false,
+        "rows": null
+    },
+    {
+        "name": "exercise-type",
+        "label": "Exercise Type",
+        "type": "text",
+        "inputProps": {},
+        "required": true,
+        "multiline": false,
+        "rows": null
+    },
+    {
+        "name": "exercise-notes",
+        "label": "Notes",
+        "type": "text",
+        "inputProps": {},
+        "required": false,
+        "multiline": true,
+        "rows": 2
+    }
+]
