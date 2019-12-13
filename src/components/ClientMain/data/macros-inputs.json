@@ -5,8 +5,9 @@
         "type": "text",
         "inputProps": {
             "minLength": 2,
-            "maxLength": 5
+            "maxLength": 3
         },
+        "isNum": true,
         "required": true
     },
     {
@@ -15,8 +16,9 @@
         "type": "text",
         "inputProps": {
             "minLength": 2,
-            "maxLength": 5
+            "maxLength": 3
         },
+        "isNum": true,
         "required": true
     },
     {
@@ -25,8 +27,9 @@
         "type": "text",
         "inputProps": {
             "minLength": 2,
-            "maxLength": 5
+            "maxLength": 3
         },
+        "isNum": true,
         "required": true
     },
     {
@@ -34,9 +37,10 @@
         "label": "Fiber",
         "type": "text",
         "inputProps": {
-            "minLength": 2,
-            "maxLength": 5
+            "minLength": 1,
+            "maxLength": 2
         },
+        "isNum": true,
         "required": true
     }
 ]
