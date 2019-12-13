@@ -1,0 +1,46 @@
+[
+    {
+        "name": "carbs",
+        "label": "Carbs",
+        "type": "text",
+        "inputProps": {
+            "minLength": 2,
+            "maxLength": 3
+        },
+        "isNum": true,
+        "required": true
+    },
+    {
+        "name": "protein",
+        "label": "Protein",
+        "type": "text",
+        "inputProps": {
+            "minLength": 2,
+            "maxLength": 3
+        },
+        "isNum": true,
+        "required": true
+    },
+    {
+        "name": "fat",
+        "label": "Fat",
+        "type": "text",
+        "inputProps": {
+            "minLength": 2,
+            "maxLength": 3
+        },
+        "isNum": true,
+        "required": true
+    },
+    {
+        "name": "fiber",
+        "label": "Fiber",
+        "type": "text",
+        "inputProps": {
+            "minLength": 1,
+            "maxLength": 2
+        },
+        "isNum": true,
+        "required": true
+    }
+]

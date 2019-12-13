@@ -1,0 +1,35 @@
+[
+    {
+        "name": "time",
+        "label": "Minutes",
+        "type": "text",
+        "inputProps": {
+            "minLength": 2,
+            "maxLength": 5
+        },
+        "isNum": true,
+        "required": true,
+        "multiline": false,
+        "rows": null
+    },
+    {
+        "name": "type",
+        "label": "Type",
+        "type": "text",
+        "inputProps": {},
+        "isNum": false,
+        "required": true,
+        "multiline": false,
+        "rows": null
+    },
+    {
+        "name": "notes",
+        "label": "Notes",
+        "type": "text",
+        "inputProps": {},
+        "isNum": false,
+        "required": false,
+        "multiline": true,
+        "rows": null
+    }
+]
