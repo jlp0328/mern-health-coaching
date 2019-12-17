@@ -90,7 +90,10 @@ class App extends Component {
 							render={props => <ClientMain client={this.state} />}
 						/>
 						<Route path='/profile' component={Profile} />
-						<Route path='/weight' component={Weight} />
+						<Route
+							path='/weight'
+							render={props => <Weight client={this.state.clientInfo} />}
+						/>
 						<Route path='/macros' component={Macros} />
 						<Route path='/measurements' component={Measurements} />
 						<Route path='/check-in' component={CheckIn} />
