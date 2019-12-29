@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
 import moment from "moment";
+import { isEmpty } from "lodash";
 
 import DailyInputsFields from "./DailyInputsFields";
 
