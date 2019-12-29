@@ -28,25 +28,27 @@ export default class ClientMainMacros extends Component {
     };
   }
 
-  async componentDidUpdate() {
-    const todaysMacros = await axios.get(
-      `http://${process.env.REACT_APP_BACKEND_IP}:5000/macros/${this.props.client._id}`
-    );
-
-    if (todaysMacros.data !== null) {
-      const today = moment().format();
-      const latestMacros = moment(todaysMacros.data.date).format(
-        "dddd, MMMM Do YYYY"
+  async componentDidUpdate(prevProps) {
+    if (prevProps !== this.props) {
+      const todaysMacros = await axios.get(
+        `http://${process.env.REACT_APP_BACKEND_IP}:5000/macros/${this.props.client._id}`
       );
 
-      this.setState({
-        needMacros: today === latestMacros ? false : true,
-        loading: false
-      });
-    } else {
-      this.setState({
-        loading: false
-      });
+      if (todaysMacros.data !== null) {
+        const today = moment().format();
+        const latestMacros = moment(todaysMacros.data.date).format(
+          "dddd, MMMM Do YYYY"
+        );
+
+        this.setState({
+          needMacros: today === latestMacros ? false : true,
+          loading: false
+        });
+      } else {
+        this.setState({
+          loading: false
+        });
+      }
     }
   }
 
@@ -57,13 +59,9 @@ export default class ClientMainMacros extends Component {
       Object.values(this.state).includes(NaN) ||
       e.target.value === "";
 
-    // How to use??
-    // console.log(isNan(e.target.value));
-
     update["submitDisabled"] = disable;
     update[e.target.name] = parseInt(e.target.value);
     this.setState(update);
-    console.log(this.state);
   };
 
   submitMacros = async e => {

@@ -11,10 +11,6 @@ import TextField from "@material-ui/core/TextField";
 
 import { isNumberKey } from "../../Common";
 
-// const DATE_NOW = new Date();
-
-//Disable submit buttons when required fields are not complete
-
 export default class ClientMainWeight extends Component {
   constructor(props) {
     super(props);
@@ -28,26 +24,28 @@ export default class ClientMainWeight extends Component {
     };
   }
 
-  async componentDidUpdate() {
-    const todaysWeight = await axios.get(
-      `http://${process.env.REACT_APP_BACKEND_IP}:5000/weight/${this.props.client._id}`
-    );
-
-    if (todaysWeight.data !== null) {
-      // const today = dateFormat(DATE_NOW, 'fullDate');
-      const today = moment().format();
-      const latestWeight = moment(todaysWeight.data[0].date).format(
-        "dddd, MMMM Do YYYY"
+  async componentDidUpdate(prevProps) {
+    if (prevProps !== this.props) {
+      const todaysWeight = await axios.get(
+        `http://${process.env.REACT_APP_BACKEND_IP}:5000/weight/${this.props.client._id}`
       );
 
-      this.setState({
-        needWeight: today === latestWeight ? false : true,
-        loading: false
-      });
-    } else {
-      this.setState({
-        loading: false
-      });
+      if (todaysWeight.data !== null) {
+        // const today = dateFormat(DATE_NOW, 'fullDate');
+        const today = moment().format();
+        const latestWeight = moment(todaysWeight.data[0].date).format(
+          "dddd, MMMM Do YYYY"
+        );
+
+        this.setState({
+          needWeight: today === latestWeight ? false : true,
+          loading: false
+        });
+      } else {
+        this.setState({
+          loading: false
+        });
+      }
     }
   }
 

@@ -27,25 +27,27 @@ export default class ClientMainExercise extends Component {
     };
   }
 
-  async componentDidUpdate() {
-    const todaysExercise = await axios.get(
-      `http://${process.env.REACT_APP_BACKEND_IP}:5000/exercise/${this.props.client._id}`
-    );
-
-    if (todaysExercise.data !== null) {
-      const today = moment().format();
-      const latestExercise = moment(todaysExercise.data[0].date).format(
-        "dddd, MMMM Do YYYY"
+  async componentDidUpdate(prevProps) {
+    if (prevProps !== this.props) {
+      const todaysExercise = await axios.get(
+        `http://${process.env.REACT_APP_BACKEND_IP}:5000/exercise/${this.props.client._id}`
       );
 
-      this.setState({
-        needExercise: today === latestExercise ? false : true,
-        loading: false
-      });
-    } else {
-      this.setState({
-        loading: false
-      });
+      if (todaysExercise.data !== null) {
+        const today = moment().format();
+        const latestExercise = moment(todaysExercise.data[0].date).format(
+          "dddd, MMMM Do YYYY"
+        );
+
+        this.setState({
+          needExercise: today === latestExercise ? false : true,
+          loading: false
+        });
+      } else {
+        this.setState({
+          loading: false
+        });
+      }
     }
   }
 

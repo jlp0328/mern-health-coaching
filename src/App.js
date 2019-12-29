@@ -11,7 +11,7 @@ import CheckIn from "./components/CheckIn/CheckIn";
 import Macros from "./components/MacrosLog/Macros";
 import Measurements from "./components/Measurements/Measurements";
 import Profile from "./components/ClientProfile/Profile";
-import Weight from "./components/WeightLog/Weight";
+import Weight from "./components/WeightLog/Weight_Hooks";
 
 import "./App.css";
 
@@ -92,7 +92,7 @@ class App extends Component {
             <Route path="/profile" component={Profile} />
             <Route
               path="/weight"
-              render={props => <Weight client={this.state.clientInfo} />}
+              render={props => <Weight client={this.state.personal} />}
             />
             <Route path="/macros" component={Macros} />
             <Route path="/measurements" component={Measurements} />
