@@ -19,12 +19,11 @@ export default function ClientMainSummaryCard({ client: { goals, personal } }) {
         ? moment(checkinday)
             .add(1, "weeks")
             .format("dddd, MMMM Do")
-        : checkinday;
+        : moment(checkinday).format("dddd, MMMM Do");
 
     //Monthly Checkin Date
     const month = moment().format("M");
     const year = moment().format("YYYY");
-    const today = moment();
     const currentMonth = moment(
       new Date(`${month} / ${personal.monthlycheckin} / ${year}`)
     );
@@ -34,7 +33,7 @@ export default function ClientMainSummaryCard({ client: { goals, personal } }) {
       .format("dddd, MMMM Do");
 
     nextMonthlyCheckin =
-      today > currentMonth
+      moment() > currentMonth
         ? upcoming
         : moment(currentMonth).format("dddd, MMMM Do");
   }
