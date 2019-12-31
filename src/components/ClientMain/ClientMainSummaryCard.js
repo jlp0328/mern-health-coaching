@@ -1,14 +1,14 @@
 import React from "react";
 import * as moment from "moment";
-import { isUndefined } from "lodash";
+import { isUndefined, isNull, isEmpty } from "lodash";
 
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 
 export default function ClientMainSummaryCard({ client: { goals, personal } }) {
-  //How to deal with change of year!!
   let nextCheckIn;
   let nextMonthlyCheckin;
+  const weeklyGoals = goals[0];
 
   //Weekly Checkin Date
   const checkinday = moment().day(personal.checkinday)._d;
@@ -52,23 +52,27 @@ export default function ClientMainSummaryCard({ client: { goals, personal } }) {
             <ul>
               <li>
                 Carbs:
-                {goals !== null ? (
-                  <span> {goals.carbs}</span>
+                {!isUndefined(weeklyGoals) ? (
+                  <span> {weeklyGoals.carbs}</span>
                 ) : (
                   <span> TBD</span>
                 )}
               </li>
               <li>
                 Protein:
-                {goals !== null ? (
-                  <span> {goals.protein}</span>
+                {!isUndefined(weeklyGoals) ? (
+                  <span> {weeklyGoals.protein}</span>
                 ) : (
                   <span> TBD</span>
                 )}
               </li>
               <li>
                 Fat:
-                {goals !== null ? <span> {goals.fat}</span> : <span> TBD</span>}
+                {!isUndefined(weeklyGoals) ? (
+                  <span> {weeklyGoals.fat}</span>
+                ) : (
+                  <span> TBD</span>
+                )}
               </li>
             </ul>
           </div>

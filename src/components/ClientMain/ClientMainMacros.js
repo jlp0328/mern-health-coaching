@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
 import moment from "moment";
-import { isEmpty } from "lodash";
+import { isEmpty, isNull } from "lodash";
 
 import DailyInputsFields from "./DailyInputsFields";
 
@@ -35,7 +35,7 @@ export default class ClientMainMacros extends Component {
         `http://${process.env.REACT_APP_BACKEND_IP}:5000/macros/${this.props.client._id}`
       );
 
-      if (todaysMacros.data !== null) {
+      if (!isNull(todaysMacros.data)) {
         const today = moment().format();
         const latestMacros = moment(todaysMacros.data.date).format(
           "dddd, MMMM Do YYYY"

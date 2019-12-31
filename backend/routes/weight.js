@@ -10,7 +10,9 @@ router.route("/:user").get((req, res) => {
 
 //Admin and Client: Get most recent weight entry
 router.route("/:user").get((req, res) => {
-  Weight.findOne({ user: req.params.user })
+  Weight.find({ user: req.params.user })
+    .sort({ _id: -1 })
+    .limit(1)
     .then(client => res.json(client))
     .catch(err => res.status(400).json("Error: " + err));
 });
