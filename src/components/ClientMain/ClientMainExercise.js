@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
 import moment from "moment";
+import { isNull, isEmpty } from "lodash";
 
 import DailyInputsFields from "./DailyInputsFields";
 
@@ -25,6 +26,8 @@ export default class ClientMainExercise extends Component {
       needExercise: true,
       loading: true
     };
+
+    console.log(this.props);
   }
 
   async componentDidUpdate(prevProps) {
@@ -33,7 +36,7 @@ export default class ClientMainExercise extends Component {
         `http://${process.env.REACT_APP_BACKEND_IP}:5000/exercise/${this.props.client._id}`
       );
 
-      if (todaysExercise.data !== null) {
+      if (!isEmpty(todaysExercise.data || !isNull(todaysExercise.data))) {
         const today = moment().format();
         const latestExercise = moment(todaysExercise.data[0].date).format(
           "dddd, MMMM Do YYYY"

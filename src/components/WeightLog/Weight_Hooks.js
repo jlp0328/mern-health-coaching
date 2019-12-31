@@ -28,6 +28,7 @@ export default function Weight(props) {
       const orderedEntries = orderBy(weightEntries.data, ["date"], ["desc"]);
       orderedEntries.forEach(entry => {
         entry.displayDate = moment(entry.date).format("dddd, MMMM Do YYYY");
+        entry.editable = false;
       });
 
       setRows(orderedEntries);
