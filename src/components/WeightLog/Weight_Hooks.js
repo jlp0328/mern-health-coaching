@@ -19,15 +19,14 @@ export default function Weight(props) {
 
   useEffect(() => {
     async function fetchData() {
-      console.log(isEmpty(props.client));
       setClient(props.client);
       let weightEntries = await axios.get(
-        `http://${process.env.REACT_APP_BACKEND_IP}:5000/weight/${props.client._id}`
+        `http://${process.env.REACT_APP_BACKEND_IP}:5000/weight/weight-log/${props.client._id}`
       );
 
       const orderedEntries = orderBy(weightEntries.data, ["date"], ["desc"]);
       orderedEntries.forEach(entry => {
-        entry.displayDate = moment(entry.date).format("dddd, MMMM Do YYYY");
+        entry.displayDate = moment(entry.date).format("dddd, MMMM Do, YYYY");
         entry.editable = false;
       });
 

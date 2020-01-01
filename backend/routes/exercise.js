@@ -1,3 +1,4 @@
+const _ = require("lodash");
 const router = require("express").Router();
 let Exercise = require("../models/exercise.model");
 
@@ -10,18 +11,17 @@ router.route("/exercise-log/:id").get((req, res) => {
 
 //Admin and Client: Get most recent exercise entry
 router.route("/:user").get((req, res) => {
-  Exercise.find({ user: req.params.user })
-    .sort({ _id: -1 })
-    .limit(1)
+  Exercise.findOne({ user: req.params.user })
+    .sort({ date: "desc" })
     .then(client => res.json(client))
     .catch(err => res.status(400).json("Error: " + err));
 });
 
 //Client: Add daily exercise
-router.route("/exercise-log").post((req, res) => {
+router.route("/daily-log").post((req, res) => {
   const data = req.body;
 
-  data.date = undefined ? new Date() : data.date;
+  data.date = _.isEmpty(data.date) ? new Date() : data.date;
 
   const newEntry = new Exercise(data);
 

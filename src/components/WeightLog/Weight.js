@@ -36,7 +36,7 @@ export default class Weight extends Component {
   async componentDidUpdate(prevProps) {
     if (prevProps !== this.props) {
       let weightEntries = await axios.get(
-        `http://${process.env.REACT_APP_BACKEND_IP}:5000/weight/${this.props.client._id}`
+        `http://${process.env.REACT_APP_BACKEND_IP}:5000/weight/weight-log/${this.props.client._id}`
       );
 
       weightEntries.data.forEach(entry => {
