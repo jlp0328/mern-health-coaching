@@ -23,7 +23,7 @@ export default function UpdateWeightModal({ open, weight }) {
   const [openModal, setOpenModal] = useState(open);
 
   useEffect(() => {
-    console.log(openModal);
+      
     setOpenModal(open);
   }, [open]);
 

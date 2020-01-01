@@ -1,6 +1,7 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import moment from "moment";
+import { isEmpty } from "lodash";
 
 import Button from "@material-ui/core/Button";
 import Card from "@material-ui/core/Card";
@@ -11,86 +12,77 @@ import TextField from "@material-ui/core/TextField";
 
 import { isNumberKey } from "../../Common";
 
-export default class ClientMainWeight extends Component {
-  constructor(props) {
-    super(props);
+export default function ClientMainWeight({ client }) {
+  const [weight, setWeight] = useState({
+    user: "",
+    weight: 0
+  });
+  const [submitDisabled, setSubmitDisabled] = useState(true);
+  const [needWeight, setNeedWeight] = useState(true);
+  const [loading, setLoading] = useState(true);
+  const [errorOnPage, setErrorOnPage] = useState(false);
 
-    this.state = {
-      client: this.props.client,
-      weight: "",
-      submitDisabled: true,
-      needWeight: true,
-      loading: true
-    };
-  }
-
-  async componentDidUpdate(prevProps) {
-    if (prevProps !== this.props) {
+  useEffect(() => {
+    async function fetchData() {
       const todaysWeight = await axios.get(
-        `http://${process.env.REACT_APP_BACKEND_IP}:5000/weight/${this.props.client._id}`
+        `http://${process.env.REACT_APP_BACKEND_IP}:5000/weight/${client._id}`
       );
 
-      if (todaysWeight.data !== null) {
-        // const today = dateFormat(DATE_NOW, 'fullDate');
-        const today = moment().format();
-        const latestWeight = moment(todaysWeight.data[0].date).format(
+      if (!isEmpty(todaysWeight.data)) {
+        const latestWeight = moment(todaysWeight.data.date).format(
           "dddd, MMMM Do YYYY"
         );
 
-        this.setState({
-          needWeight: today === latestWeight ? false : true,
-          loading: false
-        });
-      } else {
-        this.setState({
-          loading: false
-        });
+        setNeedWeight(
+          moment().format("dddd, MMMM Do YYYY") === latestWeight ? false : true
+        );
+
+        setLoading(false);
       }
     }
-  }
 
-  updateWeight = e => {
-    console.log(e.target.value.length);
-    if (e.target.value.length < 3) {
-      this.setState({
-        weight: e.target.value,
-        submitDisabled: true
-      });
-    } else {
-      this.setState({
-        weight: e.target.value,
-        submitDisabled: false
-      });
+    fetchData();
+  }, [client]);
+
+  const updateWeight = e => {
+    setWeight({
+      user: client._id,
+      weight: e.target.value
+    });
+
+    setSubmitDisabled(e.target.value.length < 3);
+  };
+
+  const submitWeight = async e => {
+    e.preventDefault();
+
+    setLoading(true);
+
+    try {
+      await axios.post(
+        `http://${process.env.REACT_APP_BACKEND_IP}:5000/weight/daily-log`,
+        weight
+      );
+      setLoading(false);
+      setNeedWeight(false);
+      setErrorOnPage(false);
+    } catch (e) {
+      console.log(e);
+      setLoading(false);
+      setErrorOnPage(true);
+      setSubmitDisabled(true);
     }
   };
 
-  submitWeight = async e => {
-    e.preventDefault();
-    let { weight } = this.state;
-    const todaysWeight = {
-      user: this.props.client._id,
-      weight
-    };
-
-    this.setState({
-      loading: true
-    });
-
-    await axios.post(
-      `http://${process.env.REACT_APP_BACKEND_IP}:5000/weight/daily-log`,
-      todaysWeight
-    );
-  };
-
-  weightFormRender = () => {
-    if (this.state.needWeight) {
+  const weightFormRender = () => {
+    if (needWeight) {
       return (
         <form className="client-landing-daily-inputs--weight">
           <TextField
             label="Weight"
             type="text"
             margin="normal"
-            onChange={this.updateWeight}
+            onChange={updateWeight}
             onKeyPress={isNumberKey}
             inputProps={{
               minLength: 2,
@@ -100,14 +92,17 @@ export default class ClientMainWeight extends Component {
           />
           <CardActions>
             <Button
-              disabled={this.state.submitDisabled}
-              onClick={this.submitWeight}
+              disabled={submitDisabled}
+              onClick={submitWeight}
               variant="contained"
               color="primary"
             >
               Submit
             </Button>
           </CardActions>
+          {errorOnPage && (
+            <p>There was an error with your submission. Please try again.</p>
+          )}
         </form>
       );
     } else {
@@ -115,22 +110,12 @@ export default class ClientMainWeight extends Component {
     }
   };
 
-  render() {
-    let weightForm;
-
-    if (this.state.loading) {
-      weightForm = <CircularProgress />;
-    } else {
-      weightForm = this.weightFormRender();
-    }
-
-    return (
-      <Card elevation={3}>
-        <CardContent>
-          <h3>Weight</h3>
-          {weightForm}
-        </CardContent>
-      </Card>
-    );
-  }
+  return (
+    <Card elevation={3}>
+      <CardContent>
+        <h3>Weight</h3>
+        {loading ? <CircularProgress /> : weightFormRender()}
+      </CardContent>
+    </Card>
+  );
 }

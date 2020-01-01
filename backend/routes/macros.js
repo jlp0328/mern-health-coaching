@@ -1,3 +1,4 @@
+const _ = require("lodash");
 const router = require("express").Router();
 let Macros = require("../models/macros.model");
 
@@ -11,15 +12,16 @@ router.route("/macros-log/:id").get((req, res) => {
 //Admin and Client: Get most recent macros entry
 router.route("/:user").get((req, res) => {
   Macros.findOne({ user: req.params.user })
+    .sort({ date: "desc" })
     .then(client => res.json(client))
     .catch(err => res.status(400).json("Error: " + err));
 });
 
 //Client: Add daily macros
-router.route("/macros-log").post((req, res) => {
+router.route("/daily-log").post((req, res) => {
   const data = req.body;
 
-  data.date = undefined ? new Date() : data.date;
+  data.date = _.isEmpty(data.date) ? new Date() : data.date;
 
   const newEntry = new Macros(data);
 

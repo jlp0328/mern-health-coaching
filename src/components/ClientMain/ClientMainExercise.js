@@ -1,7 +1,7 @@
-import React, { Component } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import moment from "moment";
-import { isNull, isEmpty } from "lodash";
+import { isEmpty } from "lodash";
 
 import DailyInputsFields from "./DailyInputsFields";
 
@@ -13,139 +13,129 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 
 const inputData = require("./data/exercise-inputs.json");
 
-export default class ClientMainExercise extends Component {
-  constructor(props) {
-    super(props);
+export default function ClientMainExercise({ client }) {
+  const [exerciseData, setExerciseData] = useState({
+    user: "",
+    time: 0,
+    type: "",
+    notes: ""
+  });
+  const [submitDisabled, setSubmitDisabled] = useState(true);
+  const [needExercise, setNeedExercise] = useState(true);
+  const [loading, setLoading] = useState(true);
+  const [errorOnPage, setErrorOnPage] = useState(false);
 
-    this.state = {
-      client: this.props.client,
-      time: "",
-      type: "",
-      notes: "",
-      submitDisabled: true,
-      needExercise: true,
-      loading: true
-    };
-
-    console.log(this.props);
-  }
-
-  async componentDidUpdate(prevProps) {
-    if (prevProps !== this.props) {
+  useEffect(() => {
+    async function fetchData() {
       const todaysExercise = await axios.get(
-        `http://${process.env.REACT_APP_BACKEND_IP}:5000/exercise/${this.props.client._id}`
+        `http://${process.env.REACT_APP_BACKEND_IP}:5000/exercise/${client._id}`
       );
 
-      if (!isEmpty(todaysExercise.data || !isNull(todaysExercise.data))) {
-        const today = moment().format();
-        const latestExercise = moment(todaysExercise.data[0].date).format(
+      if (!isEmpty(todaysExercise.data)) {
+        const latestExercise = moment(todaysExercise.data.date).format(
           "dddd, MMMM Do YYYY"
         );
 
-        this.setState({
-          needExercise: today === latestExercise ? false : true,
-          loading: false
+        setNeedExercise(
+          moment().format("dddd, MMMM Do YYYY") === latestExercise
+            ? false
+            : true
+        );
+        setExerciseData({
+          user: client._id,
+          time: 0,
+          type: "",
+          notes: ""
         });
-      } else {
-        this.setState({
-          loading: false
-        });
+        setLoading(false);
       }
     }
-  }
 
-  updateExercise = e => {
-    let update = {};
-    update[e.target.name] = e.target.value;
-    this.setState(update);
-    this.toggleSubmitButton(e);
-  };
+    fetchData();
+  }, [client]);
 
-  toggleSubmitButton(e) {
-    let disable =
-      (e.target.value === "" && e.target.name !== "notes") ||
-      this.state.time === "" ||
-      this.state.type === "";
-
-    this.setState({
-      submitDisabled: disable
-    });
-  }
-
-  submitExercise = async e => {
+  const submitExercise = async e => {
     e.preventDefault();
 
-    let { time, type, notes } = this.state;
-    time = parseInt(time);
+    setLoading(true);
 
-    const todaysExercise = {
-      user: this.props.client._id,
-      time,
-      type,
-      notes
-    };
-
-    this.setState({
-      loading: true
-    });
-
-    // await axios.post(
-    // 	`http://${process.env.REACT_APP_BACKEND_IP}:5000/weight/daily-log`,
-    // 	todaysExercise,
-    // );
+    try {
+      await axios.post(
+        `http://${process.env.REACT_APP_BACKEND_IP}:5000/exercise/daily-log`,
+        exerciseData
+      );
+      setLoading(false);
+      setNeedExercise(false);
+      setErrorOnPage(false);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+      setErrorOnPage(true);
+      setSubmitDisabled(true);
+    }
   };
 
-  createInputList = () => {
+  const updateExercise = e => {
+    let update = exerciseData;
+    update[e.target.name] =
+      e.target.name === "time" ? parseInt(e.target.value) : e.target.value;
+    setExerciseData(update);
+    toggleSubmitButton(e);
+  };
+
+  const toggleSubmitButton = e => {
+    let disable =
+      (e.target.value === "" && e.target.name !== "notes") ||
+      exerciseData.time === "" ||
+      exerciseData.type === "";
+
+    setSubmitDisabled(disable);
+  };
+
+  const createInputList = () => {
     return inputData.map((elem, index) => {
       return (
         <DailyInputsFields
           key={index}
           attributes={elem}
-          change={this.updateExercise}
+          change={updateExercise}
         />
       );
     });
   };
 
-  exerciseFormRender = () => {
-    if (this.state.needExercise) {
+  const exerciseFormRender = () => {
+    if (needExercise) {
       return (
         <form noValidate className="client-landing-daily-inputs--exercise">
-          {this.createInputList()}
+          {createInputList()}
           <CardActions>
             <Button
               variant="contained"
               color="primary"
               type="submit"
-              disabled={this.state.submitDisabled}
-              onClick={this.submitExercise}
+              disabled={submitDisabled}
+              onClick={submitExercise}
             >
               Submit
             </Button>
           </CardActions>
+          {errorOnPage && (
+            <p>There was an error with your submission. Please try again.</p>
+          )}
         </form>
       );
     } else {
-      return <h3>Thank you for submitting your exercise today!</h3>;
+      return <h4>Thank you for submitting your exercise today!</h4>;
     }
   };
 
-  render() {
-    let exerciseForm;
-
-    if (this.state.loading) {
-      exerciseForm = <CircularProgress />;
-    } else {
-      exerciseForm = this.exerciseFormRender();
-    }
-
-    return (
-      <Card elevation={3}>
-        <CardContent>
-          <h3>Exercise</h3>
-          {exerciseForm}
-        </CardContent>
-      </Card>
-    );
-  }
+  return (
+    <Card elevation={3}>
+      <CardContent>
+        <h3>Exercise</h3>
+        {loading ? <CircularProgress /> : exerciseFormRender()}
+      </CardContent>
+    </Card>
+  );
 }

@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import moment from "moment";
 import { isEmpty, isNull } from "lodash";
@@ -13,132 +13,125 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 
 const inputData = require("./data/macros-inputs.json");
 
-export default class ClientMainMacros extends Component {
-  constructor(props) {
-    super(props);
+export default function ClientMainMacros({ client }) {
+  const [macrosData, setMacrosData] = useState({
+    user: "",
+    carbs: "",
+    protein: "",
+    fat: "",
+    fiber: ""
+  });
+  const [submitDisabled, setSubmitDisabled] = useState(true);
+  const [needMacros, setNeedMacros] = useState(true);
+  const [loading, setLoading] = useState(true);
+  const [errorOnPage, setErrorOnPage] = useState(false);
 
-    this.state = {
-      client: this.props.client,
-      carbs: "",
-      protein: "",
-      fat: "",
-      fiber: "",
-      submitDisabled: true,
-      needMacros: true,
-      loading: true
-    };
-  }
-
-  async componentDidUpdate(prevProps) {
-    if (prevProps !== this.props) {
+  useEffect(() => {
+    async function fetchData() {
       const todaysMacros = await axios.get(
-        `http://${process.env.REACT_APP_BACKEND_IP}:5000/macros/${this.props.client._id}`
+        `http://${process.env.REACT_APP_BACKEND_IP}:5000/macros/${client._id}`
       );
 
-      if (!isNull(todaysMacros.data)) {
-        const today = moment().format();
+      if (!isEmpty(todaysMacros.data)) {
         const latestMacros = moment(todaysMacros.data.date).format(
           "dddd, MMMM Do YYYY"
         );
 
-        this.setState({
-          needMacros: today === latestMacros ? false : true,
-          loading: false
+        setNeedMacros(
+          moment().format("dddd, MMMM Do YYYY") === latestMacros ? false : true
+        );
+
+        setMacrosData({
+          user: client._id,
+          carbs: "",
+          protein: "",
+          fat: "",
+          fiber: ""
         });
-      } else {
-        this.setState({
-          loading: false
-        });
+
+        setLoading(false);
       }
     }
-  }
 
-  updateMacros = e => {
-    let update = {};
-    let disable =
-      Object.values(this.state).includes(" ") ||
-      Object.values(this.state).includes(NaN) ||
-      e.target.value === "";
+    fetchData();
+  }, [client]);
 
-    update["submitDisabled"] = disable;
-    update[e.target.name] = parseInt(e.target.value);
-    this.setState(update);
-  };
-
-  submitMacros = async e => {
-    e.preventDefault();
-    let { carbs, protein, fat, fiber } = this.state;
-
-    const todaysMacros = {
-      user: this.props.client._id,
-      carbs,
-      protein,
-      fat,
-      fiber
-    };
-
-    console.log(todaysMacros);
-    this.setState({
-      loading: true
-    });
-
-    // await axios.post(
-    // 	`http://${process.env.REACT_APP_BACKEND_IP}:5000/weight/daily-log`,
-    // 	todaysMacros,
-    // );
-  };
-
-  createInputList = () => {
+  const createInputList = () => {
     return inputData.map((elem, index) => {
       return (
         <DailyInputsFields
           key={index}
           attributes={elem}
-          change={this.updateMacros}
+          change={updateMacros}
         />
       );
     });
   };
 
-  macrosFormRender = () => {
-    if (this.state.needMacros) {
+  const updateMacros = e => {
+    let update = macrosData;
+    let disable =
+      Object.values(macrosData).includes(" ") ||
+      Object.values(macrosData).includes(NaN) ||
+      e.target.value === "";
+
+    setSubmitDisabled(disable);
+    update[e.target.name] = parseInt(e.target.value);
+    setMacrosData(update);
+  };
+
+  const submitMacros = async e => {
+    e.preventDefault();
+
+    try {
+      await axios.post(
+        `http://${process.env.REACT_APP_BACKEND_IP}:5000/macros/daily-log`,
+        macrosData
+      );
+
+      setLoading(false);
+      setNeedMacros(false);
+      setErrorOnPage(false);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+      setErrorOnPage(true);
+      setSubmitDisabled(true);
+    }
+  };
+
+  const macrosFormRender = () => {
+    if (needMacros) {
       return (
         <form noValidate className="client-landing-daily-inputs--macros">
-          {this.createInputList()}
+          {createInputList()}
           <CardActions>
             <Button
               variant="contained"
               color="primary"
               type="submit"
-              disabled={this.state.submitDisabled}
-              onClick={this.submitMacros}
+              disabled={submitDisabled}
+              onClick={submitMacros}
             >
               Submit
             </Button>
           </CardActions>
+          {errorOnPage && (
+            <p>There was an error with your submission. Please try again.</p>
+          )}
         </form>
       );
     } else {
-      return <h3>Thank you for submitting your macros today!</h3>;
+      return <h4>Thank you for submitting your macros today!</h4>;
     }
   };
 
-  render() {
-    let macrosForm;
-
-    if (this.state.loading) {
-      macrosForm = <CircularProgress />;
-    } else {
-      macrosForm = this.macrosFormRender();
-    }
-
-    return (
-      <Card elevation={3}>
-        <CardContent>
-          <h3>Macros</h3>
-          {macrosForm}
-        </CardContent>
-      </Card>
-    );
-  }
+  return (
+    <Card elevation={3}>
+      <CardContent>
+        <h3>Macros</h3>
+        {loading ? <CircularProgress /> : macrosFormRender()}
+      </CardContent>
+    </Card>
+  );
 }
