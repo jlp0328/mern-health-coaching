@@ -11,17 +11,17 @@ import { orderBy, isEmpty } from "lodash";
 import Datepicker from "../Datepicker/Datepicker";
 import WeightLogTable from "./WeightLogTable";
 
-export default function Weight(props) {
+export default function Weight({ client }) {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(7);
   const [rows, setRows] = useState([]);
-  const [client, setClient] = useState({});
+  const [clientInfo, setClientInfo] = useState({});
 
   useEffect(() => {
     async function fetchData() {
-      setClient(props.client);
+      setClientInfo(client);
       let weightEntries = await axios.get(
-        `http://${process.env.REACT_APP_BACKEND_IP}:5000/weight/weight-log/${props.client._id}`
+        `http://${process.env.REACT_APP_BACKEND_IP}:5000/weight/weight-log/${client._id}`
       );
 
       const orderedEntries = orderBy(weightEntries.data, ["date"], ["desc"]);
@@ -34,7 +34,7 @@ export default function Weight(props) {
     }
 
     fetchData();
-  }, [props.client]);
+  }, [client]);
 
   function handleChangeRowsPerPage(e) {
     setRowsPerPage(e.target.value);

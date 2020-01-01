@@ -96,7 +96,10 @@ class App extends Component {
             />
             <Route path="/macros" component={Macros} />
             <Route path="/measurements" component={Measurements} />
-            <Route path="/check-in" component={CheckIn} />
+            <Route
+              path="/check-in"
+              render={props => <CheckIn client={this.state.personal} />}
+            />
           </main>
         </Router>
       </div>
