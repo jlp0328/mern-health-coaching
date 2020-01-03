@@ -19,7 +19,9 @@ const weightColumns = [
 
 const exerciseColumns = [
 	{ id: 'exercise-log-date', label: 'Date', minWidth: 170, sort: true },
-	{ id: 'exercise-log-weight', label: 'Weight', minWidth: 100, sort: false },
+	{ id: 'exercise-log-time', label: 'Time', minWidth: 100, sort: false },
+	{ id: 'exercise-log-type', label: 'Type', minWidth: 100, sort: false },
+	{ id: 'exercise-log-notes', label: 'Notes', minWidth: 100, sort: false },
 ];
 
 const macrosColumns = [
