@@ -6,7 +6,7 @@ import TablePagination from '@material-ui/core/TablePagination';
 
 import axios from 'axios';
 import moment from 'moment';
-import { orderBy, isEmpty, chunk, groupBy, forIn } from 'lodash';
+import { orderBy, isEmpty, chunk, groupBy, forIn, flattenDeep } from 'lodash';
 
 import Datepicker from '../Datepicker/Datepicker';
 import WeightLogTable from './WeightLogTable';
@@ -34,16 +34,12 @@ export default function Weight({ client }) {
 			forIn(getAverage, (values, key) => {
 				let avg =
 					values.reduce((sum, { weight }) => sum + weight, 0) / values.length;
-				console.log(avg);
-				getAverage[key] = avg;
+				getAverage[key].push({ week: key, average: avg, editable: false });
 			});
 			console.log(getAverage);
 
-			// chunkedEntries.forEach(elem => {
-			// 	console.log(elem);
-			// });
-
-			setRows(orderedEntries);
+			setRows(getAverage);
+			// setRows(orderedEntries);
 		}
 
 		fetchData();
@@ -75,7 +71,7 @@ export default function Weight({ client }) {
 						{ value: rows.length, label: 'All' },
 					]}
 					component='div'
-					count={rows.length}
+					count={1000}
 					rowsPerPage={rowsPerPage}
 					onChangeRowsPerPage={handleChangeRowsPerPage}
 					page={page}
