@@ -103,6 +103,12 @@ class App extends Component {
 								<LogPage client={this.state.personal} type='macros' />
 							)}
 						/>
+						<Route
+							path='/exercise'
+							render={props => (
+								<LogPage client={this.state.personal} type='exercise' />
+							)}
+						/>
 						<Route path='/measurements' component={Measurements} />
 						<Route
 							path='/check-in'
