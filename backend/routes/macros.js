@@ -3,7 +3,7 @@ const router = require("express").Router();
 let Macros = require("../models/macros.model");
 
 //Admin and Client: Get all entries for one user
-router.route("/macros-log/:id").get((req, res) => {
+router.route("/macros-log/:user").get((req, res) => {
   Macros.find({ user: req.params.user })
     .then(client => res.json(client))
     .catch(err => res.status(400).json("Error: " + err));
