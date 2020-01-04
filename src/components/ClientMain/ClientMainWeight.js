@@ -54,6 +54,7 @@ export default function ClientMainWeight({ client }) {
   };
 
   const submitWeight = async e => {
+    //Should something be setup in the service to then calculate the weekly average?
     e.preventDefault();
 
     setLoading(true);

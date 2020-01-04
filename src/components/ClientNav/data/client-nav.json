@@ -1,0 +1,30 @@
+[
+    {
+        "name": "Home",
+        "route": "/"
+    },
+    {
+        "name": "Profile",
+        "route": "/profile"
+    },
+    {
+        "name": "Weight",
+        "route": "/weight"
+    },
+    {
+        "name": "Macros",
+        "route": "/macros"
+    },
+    {
+        "name": "Exercise",
+        "route": "/exercise"
+    },
+    {
+        "name": "Measurements",
+        "route": "/measurements"
+    },
+    {
+        "name": "Check-in",
+        "route": "/check-in"
+    }
+]
