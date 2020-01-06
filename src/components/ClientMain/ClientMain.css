@@ -3,9 +3,16 @@
   padding: 25px;
 }
 
-.client-main--summary-and-daily-logs {
+/* .client-main--summary-and-daily-logs {
   display: grid;
   grid-template-columns: 1fr 3fr;
+  width: 100%;
+} */
+
+.client-main--summary-and-daily-logs {
+  display: grid;
+  grid-template-rows: auto;
+  grid-gap: 30px;
   width: 100%;
 }
 
@@ -14,9 +21,16 @@
 }
 
 /* Client: Main Page, Summary */
-.client-landing-summary-card {
+/* .client-landing-summary-card {
   display: grid;
   grid-template-rows: auto;
+  align-items: center;
+  justify-content: center;
+} */
+
+.client-landing-summary-card {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   align-items: center;
   justify-content: center;
 }
@@ -31,18 +45,30 @@
 }
 
 /* Client: Main Page, Daily Inputs */
-.client-main--daily-card {
+/* .client-main--daily-card {
   display: flex;
   flex-direction: column;
   align-items: center;
+} */
+
+.client-landing-daily--date-and-entry {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  height: 100%;
 }
 
 .client-landing-daily-inputs {
   display: grid;
-  grid-template-columns: repeat(3, 250px);
+  grid-template-rows: auto;
   grid-gap: 25px;
   padding: 25px;
 }
+/* .client-landing-daily-inputs {
+  display: grid;
+  grid-template-columns: repeat(3, 250px);
+  grid-gap: 25px;
+  padding: 25px;
+} */
 
 .client-landing-daily-inputs--weight {
   display: flex;
@@ -53,11 +79,11 @@
 .client-landing-daily-inputs--macros,
 .client-landing-daily-inputs--exercise {
   display: grid;
-  /* grid-template-columns: repeat(2, 1fr); */
+  grid-template-columns: repeat(2, 1fr);
   padding: 10px;
-  /* grid-gap: 20px; */
+  grid-gap: 20px;
 }
 
-/* .client-landing-daily-inputs--exercise :nth-child(4) {
+.client-landing-daily-inputs--exercise :nth-child(4) {
   grid-row-start: 3;
-} */
+}

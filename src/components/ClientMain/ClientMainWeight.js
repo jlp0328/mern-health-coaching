@@ -12,7 +12,7 @@ import TextField from "@material-ui/core/TextField";
 
 import { isNumberKey } from "../../Common";
 
-export default function ClientMainWeight({ client }) {
+export default function ClientMainWeight({ client, date }) {
   const [weight, setWeight] = useState({
     user: "",
     weight: 0
@@ -24,25 +24,32 @@ export default function ClientMainWeight({ client }) {
 
   useEffect(() => {
     async function fetchData() {
-      const todaysWeight = await axios.get(
-        `http://${process.env.REACT_APP_BACKEND_IP}:5000/weight/${client._id}`
-      );
+      console.log(moment.utc(date).format("dddd, MMMM Do YYYY"));
 
-      if (!isEmpty(todaysWeight.data)) {
-        const latestWeight = moment(todaysWeight.data.date).format(
-          "dddd, MMMM Do YYYY"
-        );
+      // const entryForDate = await axios.get(
+      //   `http://${process.env.REACT_APP_BACKEND_IP}:5000/weight/${
+      //     client._id
+      //   }/${new Date(recent).toJSON()}`
+      // );
 
-        setNeedWeight(
-          moment().format("dddd, MMMM Do YYYY") === latestWeight ? false : true
-        );
+      // console.log(entryForDate);
+      // if (!isEmpty(mostRecentWeight.data)) {
+      //   const latestWeight = moment(mostRecentWeight.data.date).format(
+      //     "dddd, MMMM Do YYYY"
+      //   );
 
-        setLoading(false);
-      }
+      //   setNeedWeight(
+      //     moment(date).format("dddd, MMMM Do YYYY") === latestWeight
+      //       ? false
+      //       : true
+      //   );
+
+      setLoading(false);
+      // }
     }
 
     fetchData();
-  }, [client]);
+  }, [client, date]);
 
   const updateWeight = e => {
     setWeight({
@@ -114,7 +121,6 @@ export default function ClientMainWeight({ client }) {
   return (
     <Card elevation={3}>
       <CardContent>
-        <h3>Weight</h3>
         {loading ? <CircularProgress /> : weightFormRender()}
       </CardContent>
     </Card>

@@ -133,7 +133,6 @@ export default function ClientMainExercise({ client }) {
   return (
     <Card elevation={3}>
       <CardContent>
-        <h3>Exercise</h3>
         {loading ? <CircularProgress /> : exerciseFormRender()}
       </CardContent>
     </Card>

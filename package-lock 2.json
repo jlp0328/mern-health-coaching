@@ -1005,10 +1005,10 @@
       "resolved": "https://registry.npmjs.org/@date-io/core/-/core-2.0.0.tgz",
       "integrity": "sha512-Zam4FfQrRhGobLyjwM4qL9yoAZ66+jGHjXWf7ZrqRqeP/mrrVEAG2td/xHuUzCKz4xN3NzGcrd3r42p4n6UgXA=="
     },
-    "@date-io/date-fns": {
-      "version": "2.0.1",
-      "resolved": "https://registry.npmjs.org/@date-io/date-fns/-/date-fns-2.0.1.tgz",
-      "integrity": "sha512-wy3CWuV0dvrjm45ncO6duu4ZSOMxZpajFbEoj0X3DyNEYxjAdbv27waZYtJ2PwL85XZd9i/VaJQnh3GU7ZvP6g==",
+    "@date-io/moment": {
+      "version": "2.0.0",
+      "resolved": "https://registry.npmjs.org/@date-io/moment/-/moment-2.0.0.tgz",
+      "integrity": "sha512-7/shUYNwOn9TjFf/kAGTRnfIIseSBsNlGLzmLAUYob4eDmbpq/HiQ9arMmdLzFAhrFrqpxWbeXLW5mG3QBf0iA==",
       "requires": {
         "@date-io/core": "^2.0.0"
       }
@@ -4386,9 +4386,9 @@
       }
     },
     "date-fns": {
-      "version": "2.0.0-beta.5",
-      "resolved": "https://registry.npmjs.org/date-fns/-/date-fns-2.0.0-beta.5.tgz",
-      "integrity": "sha512-GS5yi964NDFNoja9yOdWFj9T97T67yLrUeJZgddHaVfc/6tHWtX7RXocuubmZkNzrZUZ9BqBOW7jTR5OoWjJ1w=="
+      "version": "2.8.1",
+      "resolved": "https://artifactory.fmr.com/api/npm/npm-prereleases/date-fns/-/date-fns-2.8.1.tgz",
+      "integrity": "sha1-IQk2LMtsh8PKAR6eMfcCvAnkEjs="
     },
     "debug": {
       "version": "4.1.1",
@@ -11102,13 +11102,6 @@
         "prop-types": "^15.7.2",
         "react-onclickoutside": "^6.9.0",
         "react-popper": "^1.3.4"
-      },
-      "dependencies": {
-        "date-fns": {
-          "version": "2.8.1",
-          "resolved": "https://registry.npmjs.org/date-fns/-/date-fns-2.8.1.tgz",
-          "integrity": "sha512-EL/C8IHvYRwAHYgFRse4MGAPSqlJVlOrhVYZ75iQBKrnv+ZedmYsgwH3t+BCDuZDXpoo07+q9j4qgSSOa7irJg=="
-        }
       }
     },
     "react-dev-utils": {

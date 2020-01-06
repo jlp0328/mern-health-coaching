@@ -42,10 +42,10 @@ export default function ClientMainSummaryCard({ client: { goals, personal } }) {
     <Card className="client-main--summary-card" elevation={3}>
       <CardContent>
         <div className="client-landing-summary-card">
-          <div className="client-landing-summary-card--left">
-            <p className="client-main--summary-headings">
-              Current Weekly Average: <span>145</span>
-            </p>
+          <p className="client-main--summary-headings">
+            Current Weekly Average: <span>145</span>
+          </p>
+          <div>
             <p className="client-main--summary-headings">
               Goals for this week...
             </p>
@@ -76,14 +76,12 @@ export default function ClientMainSummaryCard({ client: { goals, personal } }) {
               </li>
             </ul>
           </div>
-          <div className="client-landing-summary-card--right">
-            <p className="client-main--summary-headings">
-              Your next weekly checkin is: <span>{nextCheckIn}</span>
-            </p>
-            <p className="client-main--summary-headings">
-              Your next monthly checkin is: <span>{nextMonthlyCheckin}</span>
-            </p>
-          </div>
+          <p className="client-main--summary-headings">
+            Your next weekly checkin is: <span>{nextCheckIn}</span>
+          </p>
+          <p className="client-main--summary-headings">
+            Your next monthly checkin is: <span>{nextMonthlyCheckin}</span>
+          </p>
         </div>
       </CardContent>
     </Card>

@@ -129,7 +129,6 @@ export default function ClientMainMacros({ client }) {
   return (
     <Card elevation={3}>
       <CardContent>
-        <h3>Macros</h3>
         {loading ? <CircularProgress /> : macrosFormRender()}
       </CardContent>
     </Card>
