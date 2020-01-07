@@ -1,7 +1,7 @@
 [
     {
-        "name": "time",
-        "label": "Minutes",
+        "name": "cardiotime",
+        "label": "Cardio Minutes",
         "type": "text",
         "inputProps": {
             "minLength": 2,
@@ -13,13 +13,23 @@
         "rows": null
     },
     {
-        "name": "type",
-        "label": "Type",
+        "name": "cardiotype",
+        "label": "Cardio Type",
         "type": "text",
         "inputProps": {},
         "isNum": false,
         "required": true,
         "multiline": false,
+        "rows": null
+    },
+    {
+        "name": "addtltraining",
+        "label": "Additional training: weightlifting, yoga, etc.",
+        "type": "text",
+        "inputProps": {},
+        "isNum": false,
+        "required": true,
+        "multiline": true,
         "rows": null
     },
     {

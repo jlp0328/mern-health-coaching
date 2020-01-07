@@ -1,136 +1,157 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import moment from "moment";
-import { isEmpty, isNull } from "lodash";
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import moment from 'moment';
+import { isEmpty, isNull } from 'lodash';
 
-import DailyInputsFields from "./DailyInputsFields";
+import DailyInputsFields from './DailyInputsFields';
 
-import Button from "@material-ui/core/Button";
-import Card from "@material-ui/core/Card";
-import CardContent from "@material-ui/core/CardContent";
-import CardActions from "@material-ui/core/CardActions";
-import CircularProgress from "@material-ui/core/CircularProgress";
+import Button from '@material-ui/core/Button';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import CardActions from '@material-ui/core/CardActions';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
-const inputData = require("./data/macros-inputs.json");
+const inputData = require('./data/macros-inputs.json');
 
-export default function ClientMainMacros({ client }) {
-  const [macrosData, setMacrosData] = useState({
-    user: "",
-    carbs: "",
-    protein: "",
-    fat: "",
-    fiber: ""
-  });
-  const [submitDisabled, setSubmitDisabled] = useState(true);
-  const [needMacros, setNeedMacros] = useState(true);
-  const [loading, setLoading] = useState(true);
-  const [errorOnPage, setErrorOnPage] = useState(false);
+export default function ClientMainMacros({ client, date }) {
+	const [macrosData, setMacrosData] = useState({
+		user: '',
+		date: '',
+		carbs: '',
+		protein: '',
+		fat: '',
+		fiber: '',
+	});
+	const [submitDisabled, setSubmitDisabled] = useState(true);
+	const [needMacros, setNeedMacros] = useState(true);
+	const [loading, setLoading] = useState(true);
+	const [errorOnPage, setErrorOnPage] = useState(false);
 
-  useEffect(() => {
-    async function fetchData() {
-      const todaysMacros = await axios.get(
-        `http://${process.env.REACT_APP_BACKEND_IP}:5000/macros/${client._id}`
-      );
+	useEffect(() => {
+		async function checkForMacrosEntry() {
+			try {
+				const entry = await fetchData(client, date);
+				setNeedMacros(isEmpty(entry.data) ? true : false);
 
-      if (!isEmpty(todaysMacros.data)) {
-        const latestMacros = moment(todaysMacros.data.date).format(
-          "dddd, MMMM Do YYYY"
-        );
+				setMacrosData({
+					user: client._id,
+					date: moment.utc(date.setHours(0, 0, 0, 0)).format(),
+					carbs: '',
+					protein: '',
+					fat: '',
+					fiber: '',
+				});
 
-        setNeedMacros(
-          moment().format("dddd, MMMM Do YYYY") === latestMacros ? false : true
-        );
+				setLoading(false);
+			} catch (error) {
+				console.log(error);
+			}
+		}
+		checkForMacrosEntry();
+	}, [client, date]);
 
-        setMacrosData({
-          user: client._id,
-          carbs: "",
-          protein: "",
-          fat: "",
-          fiber: ""
-        });
+	const createInputList = () => {
+		return inputData.map((elem, index) => {
+			return (
+				<DailyInputsFields
+					key={index}
+					attributes={elem}
+					change={updateMacros}
+				/>
+			);
+		});
+	};
 
-        setLoading(false);
-      }
-    }
+	const updateMacros = e => {
+		let update = macrosData;
+		update[e.target.name] = parseInt(e.target.value);
+		setMacrosData(update);
+		disableSubmit(e);
+	};
 
-    fetchData();
-  }, [client]);
+	const disableSubmit = e => {
+		let disable =
+			Object.values(macrosData).includes('') ||
+			Object.values(macrosData).includes(NaN) ||
+			e.target.value === '';
 
-  const createInputList = () => {
-    return inputData.map((elem, index) => {
-      return (
-        <DailyInputsFields
-          key={index}
-          attributes={elem}
-          change={updateMacros}
-        />
-      );
-    });
-  };
+		setSubmitDisabled(disable);
+	};
 
-  const updateMacros = e => {
-    let update = macrosData;
-    let disable =
-      Object.values(macrosData).includes(" ") ||
-      Object.values(macrosData).includes(NaN) ||
-      e.target.value === "";
+	const submitMacros = async e => {
+		e.preventDefault();
 
-    setSubmitDisabled(disable);
-    update[e.target.name] = parseInt(e.target.value);
-    setMacrosData(update);
-  };
+		try {
+			await axios.post(
+				`http://${process.env.REACT_APP_BACKEND_IP}:5000/macros/daily-log`,
+				macrosData,
+			);
 
-  const submitMacros = async e => {
-    e.preventDefault();
+			setLoading(false);
+			setNeedMacros(false);
+			setErrorOnPage(false);
+		} catch (error) {
+			console.log(error);
+			setLoading(false);
+			setErrorOnPage(true);
+			setSubmitDisabled(true);
+		}
+	};
 
-    try {
-      await axios.post(
-        `http://${process.env.REACT_APP_BACKEND_IP}:5000/macros/daily-log`,
-        macrosData
-      );
+	const renderDate = date => {
+		return moment(date).format('dddd, MMMM Do, YYYY');
+	};
 
-      setLoading(false);
-      setNeedMacros(false);
-      setErrorOnPage(false);
-    } catch (error) {
-      console.log(error);
-      setLoading(false);
-      setErrorOnPage(true);
-      setSubmitDisabled(true);
-    }
-  };
+	const macrosFormRender = () => {
+		if (needMacros) {
+			return (
+				<form noValidate className='client-landing-daily-inputs--macros'>
+					{createInputList()}
+					<CardActions>
+						<Button
+							variant='contained'
+							color='primary'
+							type='submit'
+							disabled={submitDisabled}
+							onClick={submitMacros}>
+							Submit
+						</Button>
+					</CardActions>
+					{errorOnPage && (
+						<p>There was an error with your submission. Please try again.</p>
+					)}
+				</form>
+			);
+		} else {
+			return (
+				<h4>{`Thank you for submitting your macros for ${renderDate(
+					macrosData.date,
+				)}!`}</h4>
+			);
+		}
+	};
 
-  const macrosFormRender = () => {
-    if (needMacros) {
-      return (
-        <form noValidate className="client-landing-daily-inputs--macros">
-          {createInputList()}
-          <CardActions>
-            <Button
-              variant="contained"
-              color="primary"
-              type="submit"
-              disabled={submitDisabled}
-              onClick={submitMacros}
-            >
-              Submit
-            </Button>
-          </CardActions>
-          {errorOnPage && (
-            <p>There was an error with your submission. Please try again.</p>
-          )}
-        </form>
-      );
-    } else {
-      return <h4>Thank you for submitting your macros today!</h4>;
-    }
-  };
+	return (
+		<Card elevation={3}>
+			<CardContent>
+				{loading ? <CircularProgress /> : macrosFormRender()}
+			</CardContent>
+		</Card>
+	);
+}
 
-  return (
-    <Card elevation={3}>
-      <CardContent>
-        {loading ? <CircularProgress /> : macrosFormRender()}
-      </CardContent>
-    </Card>
-  );
+async function fetchData(client, date) {
+	let dateFormatted = moment.utc(date.setHours(0, 0, 0, 0)).format();
+
+	let entryForDate;
+
+	try {
+		entryForDate = await axios.get(
+			`http://${process.env.REACT_APP_BACKEND_IP}:5000/macros/${client._id}/${dateFormatted}`,
+		);
+	} catch (error) {
+		console.log(error);
+	}
+
+	return entryForDate;
 }

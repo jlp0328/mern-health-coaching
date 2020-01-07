@@ -1,128 +1,144 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import moment from "moment";
-import { isEmpty } from "lodash";
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import moment from 'moment';
+import { isEmpty } from 'lodash';
 
-import Button from "@material-ui/core/Button";
-import Card from "@material-ui/core/Card";
-import CardContent from "@material-ui/core/CardContent";
-import CardActions from "@material-ui/core/CardActions";
-import CircularProgress from "@material-ui/core/CircularProgress";
-import TextField from "@material-ui/core/TextField";
+import Button from '@material-ui/core/Button';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import CardActions from '@material-ui/core/CardActions';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import TextField from '@material-ui/core/TextField';
 
-import { isNumberKey } from "../../Common";
+import { isNumberKey } from '../../Common';
 
 export default function ClientMainWeight({ client, date }) {
-  const [weight, setWeight] = useState({
-    user: "",
-    weight: 0
-  });
-  const [submitDisabled, setSubmitDisabled] = useState(true);
-  const [needWeight, setNeedWeight] = useState(true);
-  const [loading, setLoading] = useState(true);
-  const [errorOnPage, setErrorOnPage] = useState(false);
+	const [weight, setWeight] = useState({
+		user: '',
+		date: '',
+		weight: 0,
+	});
+	const [submitDisabled, setSubmitDisabled] = useState(true);
+	const [needWeight, setNeedWeight] = useState(true);
+	const [loading, setLoading] = useState(true);
+	const [errorOnPage, setErrorOnPage] = useState(false);
 
-  useEffect(() => {
-    async function fetchData() {
-      console.log(moment.utc(date).format("dddd, MMMM Do YYYY"));
+	useEffect(() => {
+		async function checkForWeightEntry() {
+			try {
+				const entry = await fetchData(client, date);
+				setNeedWeight(isEmpty(entry.data) ? true : false);
 
-      // const entryForDate = await axios.get(
-      //   `http://${process.env.REACT_APP_BACKEND_IP}:5000/weight/${
-      //     client._id
-      //   }/${new Date(recent).toJSON()}`
-      // );
+				setWeight({
+					user: client._id,
+					date: moment.utc(date.setHours(0, 0, 0, 0)).format(),
+					weight: isEmpty(entry.data) ? 0 : entry.data.weight,
+				});
 
-      // console.log(entryForDate);
-      // if (!isEmpty(mostRecentWeight.data)) {
-      //   const latestWeight = moment(mostRecentWeight.data.date).format(
-      //     "dddd, MMMM Do YYYY"
-      //   );
+				setLoading(false);
+			} catch (error) {
+				console.log(error);
+			}
+		}
+		checkForWeightEntry();
+	}, [client, date]);
 
-      //   setNeedWeight(
-      //     moment(date).format("dddd, MMMM Do YYYY") === latestWeight
-      //       ? false
-      //       : true
-      //   );
+	const updateWeight = e => {
+		setWeight({
+			user: client._id,
+			date: moment.utc(date.setHours(0, 0, 0, 0)).format(),
+			weight: e.target.value,
+		});
 
-      setLoading(false);
-      // }
-    }
+		setSubmitDisabled(e.target.value.length < 3);
+	};
 
-    fetchData();
-  }, [client, date]);
+	const submitWeight = async e => {
+		//Should something be setup in the service to then calculate the weekly average?
+		e.preventDefault();
 
-  const updateWeight = e => {
-    setWeight({
-      user: client._id,
-      weight: e.target.value
-    });
+		setLoading(true);
 
-    setSubmitDisabled(e.target.value.length < 3);
-  };
+		try {
+			await axios.post(
+				`http://${process.env.REACT_APP_BACKEND_IP}:5000/weight/daily-log`,
+				weight,
+			);
+			setLoading(false);
+			setNeedWeight(false);
+			setErrorOnPage(false);
+		} catch (e) {
+			console.log(e);
+			setLoading(false);
+			setErrorOnPage(true);
+			setSubmitDisabled(true);
+		}
+	};
 
-  const submitWeight = async e => {
-    //Should something be setup in the service to then calculate the weekly average?
-    e.preventDefault();
+	const renderDate = date => {
+		return moment(date).format('dddd, MMMM Do, YYYY');
+	};
 
-    setLoading(true);
+	const weightFormRender = () => {
+		if (needWeight) {
+			return (
+				<form className='client-landing-daily-inputs--weight'>
+					<TextField
+						label='Weight'
+						type='text'
+						margin='normal'
+						onChange={updateWeight}
+						onKeyPress={isNumberKey}
+						inputProps={{
+							minLength: 2,
+							maxLength: 5,
+						}}
+						required
+					/>
+					<CardActions>
+						<Button
+							disabled={submitDisabled}
+							onClick={submitWeight}
+							variant='contained'
+							color='primary'>
+							Submit
+						</Button>
+					</CardActions>
+					{errorOnPage && (
+						<p>There was an error with your submission. Please try again.</p>
+					)}
+				</form>
+			);
+		} else {
+			return (
+				<h4>{`Thank you for submitting your weight for ${renderDate(
+					weight.date,
+				)}!`}</h4>
+			);
+		}
+	};
 
-    try {
-      await axios.post(
-        `http://${process.env.REACT_APP_BACKEND_IP}:5000/weight/daily-log`,
-        weight
-      );
-      setLoading(false);
-      setNeedWeight(false);
-      setErrorOnPage(false);
-    } catch (e) {
-      console.log(e);
-      setLoading(false);
-      setErrorOnPage(true);
-      setSubmitDisabled(true);
-    }
-  };
+	return (
+		<Card elevation={3}>
+			<CardContent>
+				{loading ? <CircularProgress /> : weightFormRender()}
+			</CardContent>
+		</Card>
+	);
+}
 
-  const weightFormRender = () => {
-    if (needWeight) {
-      return (
-        <form className="client-landing-daily-inputs--weight">
-          <TextField
-            label="Weight"
-            type="text"
-            margin="normal"
-            onChange={updateWeight}
-            onKeyPress={isNumberKey}
-            inputProps={{
-              minLength: 2,
-              maxLength: 5
-            }}
-            required
-          />
-          <CardActions>
-            <Button
-              disabled={submitDisabled}
-              onClick={submitWeight}
-              variant="contained"
-              color="primary"
-            >
-              Submit
-            </Button>
-          </CardActions>
-          {errorOnPage && (
-            <p>There was an error with your submission. Please try again.</p>
-          )}
-        </form>
-      );
-    } else {
-      return <h4>Thank you for submitting your weight today!</h4>;
-    }
-  };
+async function fetchData(client, date) {
+	let dateFormatted = moment.utc(date.setHours(0, 0, 0, 0)).format();
 
-  return (
-    <Card elevation={3}>
-      <CardContent>
-        {loading ? <CircularProgress /> : weightFormRender()}
-      </CardContent>
-    </Card>
-  );
+	let entryForDate;
+
+	try {
+		entryForDate = await axios.get(
+			`http://${process.env.REACT_APP_BACKEND_IP}:5000/weight/${client._id}/${dateFormatted}`,
+		);
+	} catch (error) {
+		console.log(error);
+	}
+
+	return entryForDate;
 }

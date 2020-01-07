@@ -1,34 +1,30 @@
-const _ = require("lodash");
-const router = require("express").Router();
-let Macros = require("../models/macros.model");
+const router = require('express').Router();
+let Macros = require('../models/macros.model');
 
 //Admin and Client: Get all entries for one user
-router.route("/macros-log/:user").get((req, res) => {
-  Macros.find({ user: req.params.user })
-    .then(client => res.json(client))
-    .catch(err => res.status(400).json("Error: " + err));
+router.route('/macros-log/:user').get((req, res) => {
+	Macros.find({ user: req.params.user })
+		.then(client => res.json(client))
+		.catch(err => res.status(400).json('Error: ' + err));
 });
 
-//Admin and Client: Get most recent macros entry
-router.route("/:user").get((req, res) => {
-  Macros.findOne({ user: req.params.user })
-    .sort({ date: "desc" })
-    .then(client => res.json(client))
-    .catch(err => res.status(400).json("Error: " + err));
+//Admin and Client: Get macro entry based on date
+router.route('/:user/:date').get((req, res) => {
+	const userInfo = req.params;
+
+	Macros.findOne({ user: userInfo.user, date: userInfo.date })
+		.then(client => res.json(client))
+		.catch(err => res.status(400).json('Error: ' + err));
 });
 
 //Client: Add daily macros
-router.route("/daily-log").post((req, res) => {
-  const data = req.body;
+router.route('/daily-log').post((req, res) => {
+	const newEntry = new Macros(req.body);
 
-  data.date = _.isEmpty(data.date) ? new Date() : data.date;
-
-  const newEntry = new Macros(data);
-
-  newEntry
-    .save()
-    .then(() => res.json("Daily macros added"))
-    .catch(err => res.status(400).json("Error: " + err));
+	newEntry
+		.save()
+		.then(() => res.json('Daily macros added'))
+		.catch(err => res.status(400).json('Error: ' + err));
 });
 
 module.exports = router;

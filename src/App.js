@@ -60,7 +60,7 @@ class App extends Component {
 	async componentDidMount() {
 		try {
 			const clientInfo = await axios.get(
-				`http://${process.env.REACT_APP_BACKEND_IP}:5000/clients/5de92ab896558099cbcdbdde`,
+				`http://${process.env.REACT_APP_BACKEND_IP}:5000/clients/5dee532f975664ad3bd47094`,
 			);
 
 			console.log(clientInfo);

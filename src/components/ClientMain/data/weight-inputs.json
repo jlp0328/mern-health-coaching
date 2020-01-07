@@ -1,0 +1,13 @@
+[
+    {
+        "name": "weight",
+        "label": "Weight",
+        "type": "text",
+        "inputProps": {
+            "minLength": 2,
+            "maxLength": 5
+        },
+        "isNum": true,
+        "required": true
+    }
+]
