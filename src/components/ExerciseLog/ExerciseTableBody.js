@@ -23,8 +23,9 @@ export default function ExerciseTableBody({ rows, page, rowsPerPage }) {
           return (
             <TableRow hover tabIndex={-1} key={row._id}>
               <TableCell align="left">{row.displayDate}</TableCell>
-              <TableCell align="left">{row.time}</TableCell>
-              <TableCell align="left">{row.type}</TableCell>
+              <TableCell align="left">{row.cardiotime}</TableCell>
+              <TableCell align="left">{row.cardiotype}</TableCell>
+              <TableCell align="left">{row.addtltraining}</TableCell>
               <TableCell className="" align="left">
                 {row.notes}
                 {row.editable ? (
