@@ -1,19 +1,19 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import moment from "moment";
-import { isEmpty } from "lodash";
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import moment from 'moment';
+import { isEmpty } from 'lodash';
 
-import DailyInputsFields from "./DailyInputsFields";
+import DailyInputsFields from './DailyInputsFields';
 
-import Button from "@material-ui/core/Button";
-import Card from "@material-ui/core/Card";
-import CardContent from "@material-ui/core/CardContent";
-import CardActions from "@material-ui/core/CardActions";
-import CircularProgress from "@material-ui/core/CircularProgress";
+import Button from '@material-ui/core/Button';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import CardActions from '@material-ui/core/CardActions';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
-const exerciseInputData = require("./data/exercise-inputs.json");
-const macrosInputData = require("./data/macros-inputs.json");
-const weightInputData = require("./data/weight-inputs.json");
+const exerciseInputData = require('./data/exercise-inputs.json');
+const macrosInputData = require('./data/macros-inputs.json');
+const weightInputData = require('./data/weight-inputs.json');
 
 export default function ClientEntryForm({ client, date, type }) {
   const [submitDisabled, setSubmitDisabled] = useState(true);
@@ -23,32 +23,32 @@ export default function ClientEntryForm({ client, date, type }) {
   const [formData, setFormData] = useState({});
 
   const dataBasedOnType = new Map();
-  dataBasedOnType.set("weight", {
-    user: "",
-    date: "",
+  dataBasedOnType.set('weight', {
+    user: '',
+    date: '',
     weight: 0
   });
-  dataBasedOnType.set("macros", {
-    user: "",
-    date: "",
-    carbs: "",
-    protein: "",
-    fat: "",
-    fiber: ""
+  dataBasedOnType.set('macros', {
+    user: '',
+    date: '',
+    carbs: '',
+    protein: '',
+    fat: '',
+    fiber: ''
   });
-  dataBasedOnType.set("exercise", {
-    user: "",
-    date: "",
+  dataBasedOnType.set('exercise', {
+    user: '',
+    date: '',
     cardiotime: 0,
-    cardiotype: "",
-    addtltraining: "",
+    cardiotype: '',
+    addtltraining: '',
     notes: null
   });
 
   const inputDataType = new Map();
-  inputDataType.set("weight", weightInputData);
-  inputDataType.set("macros", macrosInputData);
-  inputDataType.set("exercise", exerciseInputData);
+  inputDataType.set('weight', weightInputData);
+  inputDataType.set('macros', macrosInputData);
+  inputDataType.set('exercise', exerciseInputData);
 
   useEffect(() => {
     async function checkForFormEntry() {
@@ -94,11 +94,11 @@ export default function ClientEntryForm({ client, date, type }) {
   const updateEntry = e => {
     let update = formData;
 
-    if (e.target.name === "notes" && e.target.value === "") {
+    if (e.target.name === 'notes' && e.target.value === '') {
       update[e.target.name] = null;
     } else {
       update[e.target.name] =
-        e.target.name === "cardiotime"
+        e.target.name === 'cardiotime'
           ? parseInt(e.target.value)
           : e.target.value;
     }
@@ -110,9 +110,9 @@ export default function ClientEntryForm({ client, date, type }) {
   const toggleSubmitButton = e => {
     console.log(formData);
     let disable =
-      Object.values(formData).includes("") ||
+      Object.values(formData).includes('') ||
       Object.values(formData).includes(NaN) ||
-      (type === "weight" && formData.weight.length < 3);
+      (type === 'weight' && formData.weight.length < 3);
     setSubmitDisabled(disable);
   };
 
@@ -129,20 +129,20 @@ export default function ClientEntryForm({ client, date, type }) {
   const renderDate = date => {
     return new Date(date).setHours(0, 0, 0, 0) ===
       new Date().setHours(0, 0, 0, 0)
-      ? "today"
-      : moment(date).format("dddd, MMMM Do, YYYY");
+      ? 'today'
+      : moment(date).format('dddd, MMMM Do, YYYY');
   };
 
   const entryFormRender = () => {
     if (needData) {
       return (
-        <form noValidate className="client-landing-daily-inputs--exercise">
+        <form noValidate className='client-landing-daily-inputs--exercise'>
           {createInputList()}
           <CardActions>
             <Button
-              variant="contained"
-              color="primary"
-              type="submit"
+              variant='contained'
+              color='primary'
+              type='submit'
               disabled={submitDisabled}
               onClick={submitForm}
             >
