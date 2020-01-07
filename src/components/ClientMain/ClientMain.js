@@ -5,7 +5,6 @@ import "./ClientMain.css";
 import Paper from "@material-ui/core/Paper";
 
 import ClientMainSummaryCard from "./ClientMainSummaryCard";
-// import ClientMainDailyInputs from "./ClientMainDailyInputs";
 import ClientMainForm from "./ClientMainForm";
 
 const DATE_NOW = moment().format("dddd, MMMM Do");
@@ -33,7 +32,6 @@ export default class ClientMain extends Component {
         <h1>{DATE_NOW}</h1>
         <div className="client-main--summary-and-daily-logs">
           <ClientMainSummaryCard client={this.state.client} />
-          {/* <ClientMainDailyInputs client={this.state.client.personal} /> */}
           <ClientMainForm client={this.state.client.personal} />
         </div>
       </Paper>

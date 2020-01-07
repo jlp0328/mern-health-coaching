@@ -1,186 +1,189 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import moment from 'moment';
-import { isEmpty } from 'lodash';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import moment from "moment";
+import { isEmpty } from "lodash";
 
-import DailyInputsFields from './DailyInputsFields';
+import DailyInputsFields from "./DailyInputsFields";
 
-import Button from '@material-ui/core/Button';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import CardActions from '@material-ui/core/CardActions';
-import CircularProgress from '@material-ui/core/CircularProgress';
+import Button from "@material-ui/core/Button";
+import Card from "@material-ui/core/Card";
+import CardContent from "@material-ui/core/CardContent";
+import CardActions from "@material-ui/core/CardActions";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
-const exerciseInputData = require('./data/exercise-inputs.json');
-const macrosInputData = require('./data/macros-inputs.json');
-const weightInputData = require('./data/weight-inputs.json');
-
-const dataBasedOnType = new Map();
-dataBasedOnType.set('weight', {
-	user: '',
-	date: '',
-	weight: 0,
-});
-dataBasedOnType.set('macros', {
-	user: '',
-	date: '',
-	carbs: '',
-	protein: '',
-	fat: '',
-	fiber: '',
-});
-dataBasedOnType.set('exercise', {
-	user: '',
-	date: '',
-	cardiotime: 0,
-	cardiotype: '',
-	addtltraining: '',
-	notes: null,
-});
+const exerciseInputData = require("./data/exercise-inputs.json");
+const macrosInputData = require("./data/macros-inputs.json");
+const weightInputData = require("./data/weight-inputs.json");
 
 export default function ClientEntryForm({ client, date, type }) {
-	const [submitDisabled, setSubmitDisabled] = useState(true);
-	const [needData, setNeedData] = useState(true);
-	const [loading, setLoading] = useState(true);
-	const [errorOnPage, setErrorOnPage] = useState(false);
-	const [formData, setFormData] = useState({});
+  const [submitDisabled, setSubmitDisabled] = useState(true);
+  const [needData, setNeedData] = useState(true);
+  const [loading, setLoading] = useState(true);
+  const [errorOnPage, setErrorOnPage] = useState(false);
+  const [formData, setFormData] = useState({});
 
-	const inputDataType = new Map();
-	inputDataType.set('weight', weightInputData);
-	inputDataType.set('macros', macrosInputData);
-	inputDataType.set('exercise', exerciseInputData);
+  const dataBasedOnType = new Map();
+  dataBasedOnType.set("weight", {
+    user: "",
+    date: "",
+    weight: 0
+  });
+  dataBasedOnType.set("macros", {
+    user: "",
+    date: "",
+    carbs: "",
+    protein: "",
+    fat: "",
+    fiber: ""
+  });
+  dataBasedOnType.set("exercise", {
+    user: "",
+    date: "",
+    cardiotime: 0,
+    cardiotype: "",
+    addtltraining: "",
+    notes: null
+  });
 
-	useEffect(() => {
-		async function checkForFormEntry() {
-			try {
-				const entry = await fetchData(client, date, type);
-				setNeedData(isEmpty(entry.data) ? true : false);
+  const inputDataType = new Map();
+  inputDataType.set("weight", weightInputData);
+  inputDataType.set("macros", macrosInputData);
+  inputDataType.set("exercise", exerciseInputData);
 
-				let structure = dataBasedOnType.get(type);
-				structure.user = client._id;
-				structure.date = moment.utc(date.setHours(0, 0, 0, 0)).format();
-				console.log('Form change', structure);
-				setFormData(structure);
+  useEffect(() => {
+    async function checkForFormEntry() {
+      try {
+        const entry = await fetchData(client, date, type);
+        setNeedData(isEmpty(entry.data) ? true : false);
 
-				setLoading(false);
-			} catch (error) {
-				console.log(error);
-			}
-		}
-		checkForFormEntry();
-	}, [client, date, type]);
+        let structure = dataBasedOnType.get(type);
 
-	const submitForm = async e => {
-		e.preventDefault();
+        structure.user = client._id;
+        structure.date = moment.utc(date.setHours(0, 0, 0, 0)).format();
+        setFormData(structure);
 
-		setLoading(true);
+        setLoading(false);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    checkForFormEntry();
+  }, [client, date, type]);
 
-		try {
-			await axios.post(
-				`http://${process.env.REACT_APP_BACKEND_IP}:5000/${type}/daily-log`,
-				formData,
-			);
-			setLoading(false);
-			setNeedData(false);
-			setErrorOnPage(false);
-		} catch (error) {
-			console.log(error);
-			setLoading(false);
-			setErrorOnPage(true);
-			setSubmitDisabled(true);
-		}
-	};
+  const submitForm = async e => {
+    e.preventDefault();
 
-	const updateEntry = e => {
-		let update = formData;
-		console.log(formData);
+    setLoading(true);
 
-		if (e.target.name === 'notes' && e.target.value === '') {
-			update[e.target.name] = null;
-		} else {
-			update[e.target.name] =
-				e.target.name === 'cardiotime'
-					? parseInt(e.target.value)
-					: e.target.value;
-		}
+    try {
+      await axios.post(
+        `http://${process.env.REACT_APP_BACKEND_IP}:5000/${type}/daily-log`,
+        formData
+      );
+      setLoading(false);
+      setNeedData(false);
+      setErrorOnPage(false);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+      setErrorOnPage(true);
+      setSubmitDisabled(true);
+    }
+  };
 
-		setFormData(update);
-		toggleSubmitButton(e);
-	};
+  const updateEntry = e => {
+    let update = formData;
 
-	const toggleSubmitButton = e => {
-		console.log(formData);
-		let disable =
-			Object.values(formData).includes('') ||
-			Object.values(formData).includes(NaN) ||
-			formData.weight.length < 3;
-		setSubmitDisabled(disable);
-	};
+    if (e.target.name === "notes" && e.target.value === "") {
+      update[e.target.name] = null;
+    } else {
+      update[e.target.name] =
+        e.target.name === "cardiotime"
+          ? parseInt(e.target.value)
+          : e.target.value;
+    }
 
-	const createInputList = () => {
-		let inputData = inputDataType.get(type);
+    setFormData(update);
+    toggleSubmitButton(e);
+  };
 
-		return inputData.map((elem, index) => {
-			return (
-				<DailyInputsFields key={index} attributes={elem} change={updateEntry} />
-			);
-		});
-	};
+  const toggleSubmitButton = e => {
+    console.log(formData);
+    let disable =
+      Object.values(formData).includes("") ||
+      Object.values(formData).includes(NaN) ||
+      (type === "weight" && formData.weight.length < 3);
+    setSubmitDisabled(disable);
+  };
 
-	const renderDate = date => {
-		return moment(date).format('dddd, MMMM Do, YYYY');
-	};
+  const createInputList = () => {
+    let inputData = inputDataType.get(type);
 
-	const entryFormRender = () => {
-		if (needData) {
-			return (
-				<form noValidate className='client-landing-daily-inputs--exercise'>
-					{createInputList()}
-					<CardActions>
-						<Button
-							variant='contained'
-							color='primary'
-							type='submit'
-							disabled={submitDisabled}
-							onClick={submitForm}>
-							Submit
-						</Button>
-					</CardActions>
-					{errorOnPage && (
-						<p>There was an error with your submission. Please try again.</p>
-					)}
-				</form>
-			);
-		} else {
-			return (
-				<h4>{`Thank you for submitting your ${type} for ${renderDate(
-					formData.date,
-				)}!`}</h4>
-			);
-		}
-	};
+    return inputData.map((elem, index) => {
+      return (
+        <DailyInputsFields key={index} attributes={elem} change={updateEntry} />
+      );
+    });
+  };
 
-	return (
-		<Card elevation={3}>
-			<CardContent>
-				{loading ? <CircularProgress /> : entryFormRender()}
-			</CardContent>
-		</Card>
-	);
+  const renderDate = date => {
+    return new Date(date).setHours(0, 0, 0, 0) ===
+      new Date().setHours(0, 0, 0, 0)
+      ? "today"
+      : moment(date).format("dddd, MMMM Do, YYYY");
+  };
+
+  const entryFormRender = () => {
+    if (needData) {
+      return (
+        <form noValidate className="client-landing-daily-inputs--exercise">
+          {createInputList()}
+          <CardActions>
+            <Button
+              variant="contained"
+              color="primary"
+              type="submit"
+              disabled={submitDisabled}
+              onClick={submitForm}
+            >
+              Submit
+            </Button>
+          </CardActions>
+          {errorOnPage && (
+            <p>There was an error with your submission. Please try again.</p>
+          )}
+        </form>
+      );
+    } else {
+      return (
+        <h4>{`Thank you for submitting your ${type} for ${renderDate(
+          date
+        )}!`}</h4>
+      );
+    }
+  };
+
+  return (
+    <Card elevation={3}>
+      <CardContent>
+        {loading ? <CircularProgress /> : entryFormRender()}
+      </CardContent>
+    </Card>
+  );
 }
 
 async function fetchData(client, date, type) {
-	let dateFormatted = moment.utc(date.setHours(0, 0, 0, 0)).format();
+  let dateFormatted = moment.utc(date.setHours(0, 0, 0, 0)).format();
 
-	let entryForDate;
+  let entryForDate;
 
-	try {
-		entryForDate = await axios.get(
-			`http://${process.env.REACT_APP_BACKEND_IP}:5000/${type}/${client._id}/${dateFormatted}`,
-		);
-	} catch (error) {
-		console.log(error);
-	}
+  try {
+    entryForDate = await axios.get(
+      `http://${process.env.REACT_APP_BACKEND_IP}:5000/${type}/${client._id}/${dateFormatted}`
+    );
+  } catch (error) {
+    console.log(error);
+  }
 
-	return entryForDate;
+  return entryForDate;
 }
