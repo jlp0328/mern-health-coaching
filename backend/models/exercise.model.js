@@ -9,6 +9,7 @@ const exerciseSchema = new Schema(
       required: true
     },
     date: { type: Date, required: true },
+    startofweek: { type: Date, required: true },
     cardiotime: { type: Number, required: true },
     cardiotype: { type: String, required: true },
     addtltraining: { type: String, required: true },

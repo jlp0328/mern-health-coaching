@@ -1,0 +1,14 @@
+[
+    {
+        "id": "weight-log-date",
+        "label": "Date",
+        "minWidth": 170,
+        "sort": true
+    },
+    {
+        "id": "weight-log-weight",
+        "label": "Weight",
+        "minWidth": 100,
+        "sort": false
+    }
+]
