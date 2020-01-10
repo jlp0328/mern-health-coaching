@@ -18,6 +18,13 @@ export const isEnterKey = key => {
   return key === 'Enter';
 };
 
+//Convert UTC date to display date
+export const createDisplayDate = (date, log = false) => {
+  return log
+    ? moment(date).format('MMMM Do, YYYY')
+    : moment(date).format('dddd, MMMM Do, YYYY');
+};
+
 //Getting data for forms on client main page
 export const fetchData = async (client, date, type, source) => {
   let dateFormatted = moment.utc(date.setHours(0, 0, 0, 0)).format();

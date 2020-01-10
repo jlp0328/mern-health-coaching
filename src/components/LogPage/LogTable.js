@@ -29,10 +29,7 @@ export default function LogTable({ page, rowsPerPage, rows, type }) {
   columnHeaders.set('exercise', exerciseColumns);
 
   const tableType = new Map();
-  tableType.set(
-    'weight',
-    <WeightTableBody rows={data} rowsPerPage={rowsPerPage} page={page} />
-  );
+  tableType.set('weight', <WeightTableBody rows={data} />);
   tableType.set(
     'macros',
     <MacrosTableBody rows={data} rowsPerPage={rowsPerPage} page={page} />

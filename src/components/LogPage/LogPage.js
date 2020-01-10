@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import moment from "moment";
-import { orderBy, isEmpty } from "lodash";
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import moment from 'moment';
+import { orderBy, isEmpty } from 'lodash';
 
-import { makeStyles } from "@material-ui/core/styles";
-import Paper from "@material-ui/core/Paper";
-import TableContainer from "@material-ui/core/TableContainer";
-import TablePagination from "@material-ui/core/TablePagination";
+import { makeStyles } from '@material-ui/core/styles';
+import Paper from '@material-ui/core/Paper';
+import TableContainer from '@material-ui/core/TableContainer';
+import TablePagination from '@material-ui/core/TablePagination';
 
-import LogTable from "./LogTable";
+import LogTable from './LogTable';
 
 export default function LogPage({ client, type }) {
   const [page, setPage] = useState(0);
@@ -23,9 +23,9 @@ export default function LogPage({ client, type }) {
 
       console.log(type, entries);
 
-      const orderedEntries = orderBy(entries.data, ["date"], ["desc"]);
+      const orderedEntries = orderBy(entries.data, ['date'], ['desc']);
       orderedEntries.forEach(entry => {
-        entry.displayDate = moment(entry.date).format("dddd, MMMM Do, YYYY");
+        entry.displayDate = moment(entry.date).format('dddd, MMMM Do, YYYY');
         entry.editable = false;
       });
 
@@ -63,9 +63,9 @@ export default function LogPage({ client, type }) {
             25,
             50,
             100,
-            { value: rows.length, label: "All" }
+            { value: rows.length, label: 'All' }
           ]}
-          component="div"
+          component='div'
           count={rows.length}
           rowsPerPage={rowsPerPage}
           onChangeRowsPerPage={handleChangeRowsPerPage}

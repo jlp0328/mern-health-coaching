@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import moment from 'moment';
@@ -85,12 +86,14 @@ export default function ClientEntryForm({ client, date, type }) {
     return () => {
       source.cancel();
     };
-  }, [client, date, type, dataBasedOnType]);
+  }, [client, date, type]);
 
   const submitForm = async e => {
     e.preventDefault();
 
     setLoading(true);
+
+    console.log('Form data before post', formData);
 
     try {
       await axios.post(
