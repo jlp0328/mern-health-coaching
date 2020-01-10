@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
 
@@ -9,13 +9,14 @@ const weightSchema = new Schema(
       required: true
     },
     date: { type: Date, required: true },
-    weight: { type: Number, required: true }
+    weight: { type: Number, required: true },
+    startofweek: { type: Date, required: true }
   },
   {
     timestamps: true
   }
 );
 
-const Weight = mongoose.model("Weight", weightSchema);
+const Weight = mongoose.model('Weight', weightSchema);
 
 module.exports = Weight;

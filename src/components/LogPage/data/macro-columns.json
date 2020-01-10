@@ -1,0 +1,32 @@
+[
+    {
+        "id": "macros-log-date",
+        "label": "Date",
+        "minWidth": 170,
+        "sort": true
+    },
+    {
+        "id": "macros-log-carbs",
+        "label": "Carbs",
+        "minWidth": 100,
+        "sort": false
+    },
+    {
+        "id": "macros-log-protein",
+        "label": "Protein",
+        "minWidth": 100,
+        "sort": false
+    },
+    {
+        "id": "macros-log-fat",
+        "label": "Fat",
+        "minWidth": 100,
+        "sort": false
+    },
+    {
+        "id": "macros-log-fiber",
+        "label": "Fiber",
+        "minWidth": 100,
+        "sort": false
+    }
+]

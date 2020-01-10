@@ -1,0 +1,32 @@
+[
+    {
+        "id": "exercise-log-date",
+        "label": "Date",
+        "minWidth": 170,
+        "sort": true
+    },
+    {
+        "id": "exercise-log-cardio-time",
+        "label": "Cardio Time",
+        "minWidth": 100,
+        "sort": false
+    },
+    {
+        "id": "exercise-log-cardio-type",
+        "label": "Cardio Type",
+        "minWidth": 100,
+        "sort": false
+    },
+    {
+        "id": "exercise-log-addtl-training",
+        "label": "Additional Training",
+        "minWidth": 100,
+        "sort": false
+    },
+    {
+        "id": "exercise-log-notes",
+        "label": " Notes",
+        "minWidth": 100,
+        "sort": false
+    }
+]

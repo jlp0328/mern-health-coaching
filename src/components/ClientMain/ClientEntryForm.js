@@ -1,7 +1,10 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import moment from 'moment';
 import { isEmpty } from 'lodash';
+
+import { determineCorrespondingCheckin, fetchData } from '../../Common';
 
 import DailyInputsFields from './DailyInputsFields';
 
@@ -26,11 +29,13 @@ export default function ClientEntryForm({ client, date, type }) {
   dataBasedOnType.set('weight', {
     user: '',
     date: '',
-    weight: 0
+    weight: 0,
+    startofweek: ''
   });
   dataBasedOnType.set('macros', {
     user: '',
     date: '',
+    startofweek: '',
     carbs: '',
     protein: '',
     fat: '',
@@ -39,6 +44,7 @@ export default function ClientEntryForm({ client, date, type }) {
   dataBasedOnType.set('exercise', {
     user: '',
     date: '',
+    startofweek: '',
     cardiotime: 0,
     cardiotype: '',
     addtltraining: '',
@@ -51,29 +57,43 @@ export default function ClientEntryForm({ client, date, type }) {
   inputDataType.set('exercise', exerciseInputData);
 
   useEffect(() => {
+    let source = axios.CancelToken.source();
+
     async function checkForFormEntry() {
       try {
-        const entry = await fetchData(client, date, type);
-        setNeedData(isEmpty(entry.data) ? true : false);
+        const entry = await fetchData(client, date, type, source);
 
-        let structure = dataBasedOnType.get(type);
+        if (!isEmpty(entry)) {
+          setNeedData(isEmpty(entry.data) ? true : false);
 
-        structure.user = client._id;
-        structure.date = moment.utc(date.setHours(0, 0, 0, 0)).format();
-        setFormData(structure);
+          let start = determineCorrespondingCheckin(client, date);
 
-        setLoading(false);
+          let structure = dataBasedOnType.get(type);
+
+          structure.user = client._id;
+          structure.date = moment.utc(date.setHours(0, 0, 0, 0)).format();
+          structure.startofweek = start;
+          setFormData(structure);
+
+          setLoading(false);
+        }
       } catch (error) {
         console.log(error);
       }
     }
     checkForFormEntry();
+
+    return () => {
+      source.cancel();
+    };
   }, [client, date, type]);
 
   const submitForm = async e => {
     e.preventDefault();
 
     setLoading(true);
+
+    console.log('Form data before post', formData);
 
     try {
       await axios.post(
@@ -170,20 +190,4 @@ export default function ClientEntryForm({ client, date, type }) {
       </CardContent>
     </Card>
   );
-}
-
-async function fetchData(client, date, type) {
-  let dateFormatted = moment.utc(date.setHours(0, 0, 0, 0)).format();
-
-  let entryForDate;
-
-  try {
-    entryForDate = await axios.get(
-      `http://${process.env.REACT_APP_BACKEND_IP}:5000/${type}/${client._id}/${dateFormatted}`
-    );
-  } catch (error) {
-    console.log(error);
-  }
-
-  return entryForDate;
 }
