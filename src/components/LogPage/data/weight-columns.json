@@ -10,5 +10,11 @@
         "label": "Weight",
         "minWidth": 100,
         "sort": false
+    },
+    {
+        "id": "weight-log-edit",
+        "label": "Update",
+        "minWidth": 100,
+        "sort": false
     }
 ]

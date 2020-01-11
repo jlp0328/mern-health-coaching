@@ -1,9 +1,3 @@
-.weight-log-edit-weight {
-  display: flex !important;
-  justify-content: space-around;
-  align-items: center;
-}
-
 /* Weight Log Page */
 .weight-log-page--week-and-avg {
   display: flex;

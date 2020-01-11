@@ -40,6 +40,7 @@ export default function LogTable({ page, rowsPerPage, rows, type }) {
   );
 
   useEffect(() => {
+    console.log(rows);
     setData(rows);
   }, [rows]);
 
