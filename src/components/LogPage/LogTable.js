@@ -22,14 +22,29 @@ export default function LogTable({ page, rowsPerPage, rows, type }) {
   const [sort, setSort] = useState('desc');
   const [data, setData] = useState(rows);
   const [columns, setColumns] = useState([]);
+  const [average, setAverage] = useState(0);
 
   const columnHeaders = new Map();
   columnHeaders.set('weight', weightColumns);
   columnHeaders.set('macros', macrosColumns);
   columnHeaders.set('exercise', exerciseColumns);
 
+  const calculateWeeklyWeightAvg = () => {
+    let weightOnly = [];
+    data.forEach(elem => {
+      weightOnly.push(elem.weight);
+    });
+
+    let calcAvg = (weightOnly.reduce((a, b) => a + b) / data.length).toFixed(2);
+
+    setAverage(calcAvg);
+  };
+
   const tableType = new Map();
-  tableType.set('weight', <WeightTableBody rows={data} />);
+  tableType.set(
+    'weight',
+    <WeightTableBody rows={data} average={calculateWeeklyWeightAvg} />
+  );
   tableType.set(
     'macros',
     <MacrosTableBody rows={data} rowsPerPage={rowsPerPage} page={page} />
@@ -42,6 +57,7 @@ export default function LogTable({ page, rowsPerPage, rows, type }) {
   useEffect(() => {
     console.log(rows);
     setData(rows);
+    calculateWeeklyWeightAvg();
   }, [rows]);
 
   useEffect(() => {
@@ -82,6 +98,7 @@ export default function LogTable({ page, rowsPerPage, rows, type }) {
         </TableHead>
         {tableType.get(type)}
       </Table>
+      {type === 'weight' && <h3>{`Weekly average: ${average}`}</h3>}
     </div>
   );
 }

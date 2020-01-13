@@ -30,14 +30,14 @@ export default function WeightTablePage({ client, type }) {
     fetchData();
   }, [client, type]);
 
-  const calculateWeeklyWeightAvg = entries => {
-    let weightOnly = [];
-    entries.forEach(elem => {
-      weightOnly.push(elem.weight);
-    });
+  // const calculateWeeklyWeightAvg = entries => {
+  //   let weightOnly = [];
+  //   entries.forEach(elem => {
+  //     weightOnly.push(elem.weight);
+  //   });
 
-    return (weightOnly.reduce((a, b) => a + b) / entries.length).toFixed(2);
-  };
+  //   return (weightOnly.reduce((a, b) => a + b) / entries.length).toFixed(2);
+  // };
 
   const renderTables = () => {
     let groupedEntries = groupBy(rows, 'startofweek');
@@ -48,7 +48,6 @@ export default function WeightTablePage({ client, type }) {
           <div key={key}>
             <div className='weight-log-page--week-and-avg'>
               <h2>{`Week of ${createDisplayDate(key, true)}`}</h2>
-              <h2>{`Weekly average: ${calculateWeeklyWeightAvg(values)}`}</h2>
             </div>
             <Paper>
               <TableContainer>

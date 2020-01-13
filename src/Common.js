@@ -47,6 +47,18 @@ export const fetchData = async (client, date, type, source) => {
   return entryForDate;
 };
 
+//Updating data for weight, macros, exercise on log pages
+export const updateLogData = async (data, type) => {
+  try {
+    await axios.post(
+      `http://${process.env.REACT_APP_BACKEND_IP}:5000/${type}/update-${type}`,
+      data
+    );
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 //Determine the week that weight, macros, or exercise correspond to
 export const determineCorrespondingCheckin = (client, date) => {
   if (!isEmpty(client)) {
@@ -67,4 +79,13 @@ export const determineCorrespondingCheckin = (client, date) => {
 
     return startOfWeek;
   }
+};
+
+export const weeklyWeightAverageCalc = entries => {
+  let weightOnly = [];
+  entries.forEach(elem => {
+    weightOnly.push(elem.weight);
+  });
+
+  return (weightOnly.reduce((a, b) => a + b) / entries.length).toFixed(2);
 };
