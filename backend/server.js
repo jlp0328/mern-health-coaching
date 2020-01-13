@@ -15,14 +15,18 @@ app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-mongoose.connect(url, { useNewUrlParser: true, useCreateIndex: true });
+mongoose.connect(url, {
+  useNewUrlParser: true,
+  useCreateIndex: true,
+  useFindAndModify: false
+});
 const connection = mongoose.connection;
 connection.once('open', () => {
-	console.log('MongoDB database connection established successfully');
+  console.log('MongoDB database connection established successfully');
 });
 
 connection.on('error', err => {
-	console.error('Error: ', err);
+  console.error('Error: ', err);
 });
 
 const clientsRouter = require('./routes/clients');
@@ -36,5 +40,5 @@ app.use('/macros', macrosRouter);
 app.use('/weight', weightRouter);
 
 app.listen(port, () => {
-	console.log(`Server is running on port: ${port}`);
+  console.log(`Server is running on port: ${port}`);
 });

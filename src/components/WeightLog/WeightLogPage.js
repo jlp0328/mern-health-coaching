@@ -6,64 +6,50 @@ import { createDisplayDate } from '../../Common';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import TableContainer from '@material-ui/core/TableContainer';
-import Fab from '@material-ui/core/Fab';
-import Button from '@material-ui/core/Button';
-import EditIcon from '@material-ui/icons/Edit';
 
-import UpdateWeightModal from '../Modal/UpdateWeightModal';
 import LogTable from '../LogPage/LogTable';
 
 export default function WeightTablePage({ client, type }) {
-  const [rows, setRows] = useState([]);
+	const [rows, setRows] = useState([]);
 
-  useEffect(() => {
-    async function fetchData() {
-      let entries = await axios.get(
-        `http://${process.env.REACT_APP_BACKEND_IP}:5000/${type}/${type}-log/${client._id}`
-      );
+	useEffect(() => {
+		async function fetchData() {
+			let entries = await axios.get(
+				`http://${process.env.REACT_APP_BACKEND_IP}:5000/${type}/${type}-log/${client._id}`,
+			);
 
-      const orderedEntries = orderBy(entries.data, ['date'], ['desc']);
-      orderedEntries.forEach(entry => {
-        entry.displayDate = createDisplayDate(entry.date);
-        entry.editable = false;
-      });
+			const orderedEntries = orderBy(entries.data, ['date'], ['desc']);
+			orderedEntries.forEach(entry => {
+				entry.displayDate = createDisplayDate(entry.date);
+				entry.editable = false;
+			});
 
-      setRows(orderedEntries);
-    }
+			setRows(orderedEntries);
+		}
 
-    fetchData();
-  }, [client, type]);
+		fetchData();
+	}, [client, type]);
 
-  const calculateWeeklyWeightAvg = entries => {
-    let weightOnly = [];
-    entries.forEach(elem => {
-      weightOnly.push(elem.weight);
-    });
+	const renderTables = () => {
+		let groupedEntries = groupBy(rows, 'startofweek');
 
-    return (weightOnly.reduce((a, b) => a + b) / entries.length).toFixed(2);
-  };
+		return (
+			<div className=''>
+				{Object.entries(groupedEntries).map(([key, values]) => (
+					<div key={key}>
+						<div className='weight-log-page--week-and-avg'>
+							<h2>{`Week of ${createDisplayDate(key, true)}`}</h2>
+						</div>
+						<Paper>
+							<TableContainer>
+								<LogTable rows={values} type={type} />
+							</TableContainer>
+						</Paper>
+					</div>
+				))}
+			</div>
+		);
+	};
 
-  const renderTables = () => {
-    let groupedEntries = groupBy(rows, 'startofweek');
-
-    return (
-      <div className=''>
-        {Object.entries(groupedEntries).map(([key, values]) => (
-          <div key={key}>
-            <div className='weight-log-page--week-and-avg'>
-              <h2>{`Week of ${createDisplayDate(key, true)}`}</h2>
-              <h2>{`Weekly average: ${calculateWeeklyWeightAvg(values)}`}</h2>
-            </div>
-            <Paper>
-              <TableContainer>
-                <LogTable rows={values} type={type} />
-              </TableContainer>
-            </Paper>
-          </div>
-        ))}
-      </div>
-    );
-  };
-
-  return renderTables();
+	return renderTables();
 }
