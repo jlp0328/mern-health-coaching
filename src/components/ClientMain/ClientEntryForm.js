@@ -119,7 +119,7 @@ export default function ClientEntryForm({ client, date, type }) {
     } else {
       update[e.target.name] =
         e.target.name === 'cardiotime'
-          ? parseInt(e.target.value)
+          ? parseFloat(e.target.value)
           : e.target.value;
     }
 

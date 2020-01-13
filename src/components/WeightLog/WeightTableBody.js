@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { findIndex, isEmpty } from 'lodash';
+import { findIndex, isNaN } from 'lodash';
 import { isNumberKey, updateLogData } from '../../Common';
 
 import TableBody from '@material-ui/core/TableBody';
@@ -25,12 +25,12 @@ export default function WeightTableBodyAvg({ rows, average }) {
   };
 
   const saveUpdatedWeight = row => {
-    let updatedWeight = parseInt(document.getElementById(row._id).value);
+    let updatedWeight = parseFloat(document.getElementById(row._id).value);
     let update = [...entries];
     let index = findIndex(update, row);
     update[index].editable = false;
 
-    if (!isEmpty(updatedWeight)) {
+    if (!isNaN(updatedWeight)) {
       update[index].weight = row.weight = updatedWeight;
       updateLogData(row, 'weight');
     }
@@ -39,7 +39,7 @@ export default function WeightTableBodyAvg({ rows, average }) {
   };
 
   const updateWeightAvg = () => {
-    average();
+    average(rows);
   };
 
   return (
