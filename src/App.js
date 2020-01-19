@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import moment from 'moment';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 
 // import clsx from "clsx";
@@ -14,6 +15,7 @@ import Profile from './components/ClientProfile/Profile';
 //Used for Weight, Macros, Exercise Logs
 import LogPage from './components/LogPage/LogPage';
 import WeightLogPage from './components/WeightLog/WeightLogPage';
+import MacrosLogPage from './components/MacrosLog/MacrosLogPage';
 
 import './App.css';
 
@@ -64,7 +66,6 @@ class App extends Component {
         `http://${process.env.REACT_APP_BACKEND_IP}:5000/clients/5de92ab896558099cbcdbdde`
       );
 
-      console.log(clientInfo);
       const clientGoals = await axios.get(
         `http://${process.env.REACT_APP_BACKEND_IP}:5000/clients/goals/${clientInfo.data._id}`
       );
@@ -101,7 +102,11 @@ class App extends Component {
             <Route
               path='/macros'
               render={props => (
-                <LogPage client={this.state.personal} type='macros' />
+                <MacrosLogPage
+                  client={this.state.personal}
+                  goals={this.state.goals}
+                  type='macros'
+                />
               )}
             />
             <Route

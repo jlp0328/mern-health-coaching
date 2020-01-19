@@ -27,4 +27,19 @@ router.route('/daily-log').post((req, res) => {
 		.catch(err => res.status(400).json('Error: ' + err));
 });
 
+//Client: Update daily macros
+router.route('/update-macros').post((req, res) => {
+	let { user, date, protein, carbs, fat, fiber } = req.body;
+
+	Macros.findOneAndUpdate(
+		{ user: user, date: date },
+		{ protein: protein, carbs: carbs, fat: fat, fiber: fiber },
+		{
+			new: true,
+		},
+	)
+		.then(client => res.json(client))
+		.catch(err => res.status(400).json('Error: ' + err));
+});
+
 module.exports = router;

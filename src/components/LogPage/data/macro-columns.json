@@ -3,30 +3,91 @@
         "id": "macros-log-date",
         "label": "Date",
         "minWidth": 170,
-        "sort": true
+        "sort": true,
+        "divider": false
     },
     {
-        "id": "macros-log-carbs",
-        "label": "Carbs",
+        "id": "macros-log-calories-goals",
+        "label": "Calories",
         "minWidth": 100,
-        "sort": false
+        "sort": false,
+        "divider": false
     },
     {
-        "id": "macros-log-protein",
+        "id": "macros-log-protein-goals",
         "label": "Protein",
         "minWidth": 100,
-        "sort": false
+        "sort": false,
+        "divider": false
     },
     {
-        "id": "macros-log-fat",
+        "id": "macros-log-carbs-goals",
+        "label": "Carbs",
+        "minWidth": 100,
+        "sort": false,
+        "divider": false
+    },
+    {
+        "id": "macros-log-fat-goals",
         "label": "Fat",
         "minWidth": 100,
-        "sort": false
+        "sort": false,
+        "divider": true
     },
     {
-        "id": "macros-log-fiber",
+        "id": "macros-log-protein-actual",
+        "label": "Protein",
+        "minWidth": 100,
+        "sort": false,
+        "divider": false
+    },
+    {
+        "id": "macros-log-carbs-actual",
+        "label": "Carbs",
+        "minWidth": 100,
+        "sort": false,
+        "divider": false
+    },
+    {
+        "id": "macros-log-fat-actual",
+        "label": "Fat",
+        "minWidth": 100,
+        "sort": false,
+        "divider": false
+    },
+    {
+        "id": "macros-log-fiber-actual",
         "label": "Fiber",
         "minWidth": 100,
-        "sort": false
+        "sort": false,
+        "divider": true
+    },
+    {
+        "id": "macros-log-protein-diff",
+        "label": "Protein",
+        "minWidth": 100,
+        "sort": false,
+        "divider": false
+    },
+    {
+        "id": "macros-log-carbs-diff",
+        "label": "Carbs",
+        "minWidth": 100,
+        "sort": false,
+        "divider": false
+    },
+    {
+        "id": "macros-log-fat-diff",
+        "label": "Fat",
+        "minWidth": 100,
+        "sort": false,
+        "divider": false
+    },
+    {
+        "id": "macros-log-edit",
+        "label": "Update",
+        "minWidth": 100,
+        "sort": false,
+        "divider": false
     }
 ]

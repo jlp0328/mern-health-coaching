@@ -1,6 +1,17 @@
 /* Weight Log Page */
 .weight-log-page--week-and-avg {
-  display: flex;
-  width: 100%;
-  justify-content: space-between;
+	display: flex;
+	width: 100%;
+	justify-content: space-between;
+}
+
+/* Macros Page */
+.macros-log--tables {
+	display: grid;
+	grid-template-columns: 49% 49%;
+	grid-gap: 2%;
+}
+
+.macros-log--divider {
+	border-right: 1px black solid;
 }

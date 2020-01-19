@@ -19,7 +19,7 @@ import weightColumns from './data/weight-columns.json';
 
 import { orderBy } from 'lodash';
 
-export default function LogTable({ page, rowsPerPage, rows, type }) {
+export default function LogTable({ rows, type }) {
 	const [sort, setSort] = useState('desc');
 	const [data, setData] = useState(rows);
 	const [columns, setColumns] = useState([]);
@@ -30,7 +30,7 @@ export default function LogTable({ page, rowsPerPage, rows, type }) {
 	columnHeaders.set('macros', macrosColumns);
 	columnHeaders.set('exercise', exerciseColumns);
 
-	const calculateWeeklyWeightAvg = useCallback(() => {
+	const calculateWeeklyWeightAvg = () => {
 		let weightOnly = [];
 		data.forEach(elem => {
 			weightOnly.push(elem.weight);
@@ -39,25 +39,21 @@ export default function LogTable({ page, rowsPerPage, rows, type }) {
 		let calcAvg = (weightOnly.reduce((a, b) => a + b) / data.length).toFixed(2);
 
 		setAverage(calcAvg);
-	});
+	};
 
 	const tableType = new Map();
 	tableType.set(
 		'weight',
 		<WeightTableBody rows={data} average={calculateWeeklyWeightAvg} />,
 	);
-	tableType.set(
-		'macros',
-		<MacrosTableBody rows={data} rowsPerPage={rowsPerPage} page={page} />,
-	);
-	tableType.set(
-		'exercise',
-		<ExerciseTableBody rows={data} rowsPerPage={rowsPerPage} page={page} />,
-	);
+	tableType.set('macros', <MacrosTableBody rows={data} />);
+	tableType.set('exercise', <ExerciseTableBody rows={data} />);
 
 	useEffect(() => {
 		setData(rows);
-		calculateWeeklyWeightAvg();
+		if (type === 'weight') {
+			calculateWeeklyWeightAvg();
+		}
 	}, [rows]);
 
 	useEffect(() => {
@@ -75,11 +71,25 @@ export default function LogTable({ page, rowsPerPage, rows, type }) {
 		<div>
 			<Table stickyHeader aria-label='sticky table'>
 				<TableHead>
+					{type === 'macros' && (
+						<TableRow>
+							<TableCell colSpan={5} align='center'>
+								Goals
+							</TableCell>
+							<TableCell colSpan={4} align='center'>
+								Actual
+							</TableCell>
+							<TableCell colSpan={5} align='center'>
+								Difference
+							</TableCell>
+						</TableRow>
+					)}
 					<TableRow>
 						{columns.map(column => (
 							<TableCell
 								key={column.id}
-								align={column.align}
+								align='center'
+								className={column.divider ? 'macros-log--divider' : ''}
 								style={{
 									minWidth: column.minWidth,
 								}}>

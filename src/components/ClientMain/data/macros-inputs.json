@@ -1,7 +1,7 @@
 [
     {
-        "name": "carbs",
-        "label": "Carbs",
+        "name": "protein",
+        "label": "Protein",
         "type": "text",
         "inputProps": {
             "minLength": 2,
@@ -11,8 +11,8 @@
         "required": true
     },
     {
-        "name": "protein",
-        "label": "Protein",
+        "name": "carbs",
+        "label": "Carbs",
         "type": "text",
         "inputProps": {
             "minLength": 2,

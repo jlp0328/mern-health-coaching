@@ -9,7 +9,7 @@ import CardContent from '@material-ui/core/CardContent';
 export default function ClientMainSummaryCard({ client: { goals, personal } }) {
 	let nextCheckIn;
 	let nextMonthlyCheckin;
-	const weeklyGoals = goals[0];
+	const weeklyGoals = goals;
 
 	//Weekly Checkin Date
 	const checkinday = moment().day(personal.checkinday)._d;
@@ -54,7 +54,7 @@ export default function ClientMainSummaryCard({ client: { goals, personal } }) {
 							<li>
 								Carbs:
 								{!isUndefined(weeklyGoals) ? (
-									<span> {weeklyGoals.carbs}</span>
+									<span> {weeklyGoals.carbsgoal}</span>
 								) : (
 									<span> TBD</span>
 								)}
@@ -62,7 +62,7 @@ export default function ClientMainSummaryCard({ client: { goals, personal } }) {
 							<li>
 								Protein:
 								{!isUndefined(weeklyGoals) ? (
-									<span> {weeklyGoals.protein}</span>
+									<span> {weeklyGoals.proteingoal}</span>
 								) : (
 									<span> TBD</span>
 								)}
@@ -70,7 +70,7 @@ export default function ClientMainSummaryCard({ client: { goals, personal } }) {
 							<li>
 								Fat:
 								{!isUndefined(weeklyGoals) ? (
-									<span> {weeklyGoals.fat}</span>
+									<span> {weeklyGoals.fatgoal}</span>
 								) : (
 									<span> TBD</span>
 								)}
