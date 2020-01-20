@@ -32,7 +32,6 @@ router.route('/add-client').post((req, res) => {
 
 //Update client record
 router.route('/update-client').post((req, res) => {
-  console.log(req);
   const userInfo = req.body;
   const userId = { _id: userInfo._id };
 
@@ -51,12 +50,6 @@ router.route('/goals/:user').get((req, res) => {
     .sort({ _id: -1 })
     .then(client => res.json(client))
     .catch(err => res.status(400).json('Error: ' + err));
-
-  // Goals.find({ user: req.params.user })
-  // 	.sort({ _id: -1 })
-  // 	.limit(1)
-  // 	.then(client => res.json(client))
-  // 	.catch(err => res.status(400).json('Error: ' + err));
 });
 
 //Get all client goals
