@@ -10,65 +10,67 @@ import TableContainer from '@material-ui/core/TableContainer';
 import LogTable from '../LogPage/LogTable';
 
 export default function MacrosLogPage({ client, goals, type }) {
-	const [rows, setRows] = useState([]);
+  const [rows, setRows] = useState([]);
 
-	useEffect(() => {
-		async function fetchData() {
-			let [macros, goals] = await axios.all([
-				getAllMacrosEntries(client, type),
-				getAllGoalsEntries(client),
-			]);
+  useEffect(() => {
+    async function fetchData() {
+      let [macros, goals] = await axios.all([
+        getAllMacrosEntries(client, type),
+        getAllGoalsEntries(client)
+      ]);
 
-			macros.data.forEach((elem, index) => {
-				let macros = find(goals.data, { startofweek: elem.startofweek });
-				elem = merge(elem, macros);
-				elem.unique = index;
-			});
+      macros.data.forEach((elem, index) => {
+        let macros = find(goals.data, { startofweek: elem.startofweek });
+        elem = merge(elem, macros);
+        elem.unique = index;
+      });
 
-			const orderedEntries = orderBy(macros.data, ['date'], ['desc']);
-			orderedEntries.forEach(entry => {
-				entry.displayDate = createDisplayDate(entry.date);
-				entry.editable = false;
-			});
+      const orderedEntries = orderBy(macros.data, ['date'], ['desc']);
+      orderedEntries.forEach(entry => {
+        entry.displayDate = createDisplayDate(entry.date);
+        entry.editable = false;
+      });
 
-			setRows(orderedEntries);
-		}
+      console.log(orderedEntries);
 
-		fetchData();
-	}, [client, type]);
+      setRows(orderedEntries);
+    }
 
-	const getAllMacrosEntries = (client, type) => {
-		return axios.get(
-			`http://${process.env.REACT_APP_BACKEND_IP}:5000/${type}/${type}-log/${client._id}`,
-		);
-	};
+    fetchData();
+  }, [client, type]);
 
-	const getAllGoalsEntries = (client, type) => {
-		return axios.get(
-			`http://${process.env.REACT_APP_BACKEND_IP}:5000/clients/goals-log/${client._id}`,
-		);
-	};
+  const getAllMacrosEntries = (client, type) => {
+    return axios.get(
+      `http://${process.env.REACT_APP_BACKEND_IP}:5000/${type}/${type}-log/${client._id}`
+    );
+  };
 
-	const renderTables = () => {
-		let groupedEntries = groupBy(rows, 'startofweek');
+  const getAllGoalsEntries = (client, type) => {
+    return axios.get(
+      `http://${process.env.REACT_APP_BACKEND_IP}:5000/clients/goals-log/${client._id}`
+    );
+  };
 
-		return (
-			<div className=''>
-				{Object.entries(groupedEntries).map(([key, values]) => (
-					<div key={key}>
-						<div className='weight-log-page--week-and-avg'>
-							<h2>{`Check-In Week: ${createDisplayDate(key, true)}`}</h2>
-						</div>
-						<Paper>
-							<TableContainer>
-								<LogTable rows={values} type={type} />
-							</TableContainer>
-						</Paper>
-					</div>
-				))}
-			</div>
-		);
-	};
+  const renderTables = () => {
+    let groupedEntries = groupBy(rows, 'startofweek');
 
-	return renderTables();
+    return (
+      <div className=''>
+        {Object.entries(groupedEntries).map(([key, values]) => (
+          <div key={key}>
+            <div className='weight-log-page--week-and-avg'>
+              <h2>{`Check-In Week: ${createDisplayDate(key, true)}`}</h2>
+            </div>
+            <Paper>
+              <TableContainer>
+                <LogTable rows={values} type={type} />
+              </TableContainer>
+            </Paper>
+          </div>
+        ))}
+      </div>
+    );
+  };
+
+  return renderTables();
 }
