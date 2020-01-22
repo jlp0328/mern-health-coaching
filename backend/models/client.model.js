@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
 
@@ -16,6 +16,7 @@ const userSchema = new Schema(
     dob: { type: String, required: true },
     phone: { type: Number, required: true },
     email: { type: String, required: true },
+    instagram: { type: String, required: true },
     checkinday: { type: String, required: true },
     form: { type: String, required: true },
     monthlycheckin: { type: Number, required: true },
@@ -27,6 +28,6 @@ const userSchema = new Schema(
   }
 );
 
-const Client = mongoose.model("Client", userSchema);
+const Client = mongoose.model('Client', userSchema);
 
 module.exports = Client;

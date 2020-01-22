@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import * as moment from 'moment';
 import { isUndefined, isNull, isEmpty } from 'lodash';
 import { determineCorrespondingCheckin } from '../../Common';
@@ -12,10 +12,10 @@ export default function ClientMainSummaryCard({ client: { goals, personal } }) {
 	const weeklyGoals = goals;
 
 	//Weekly Checkin Date
-	const checkinday = moment().day(personal.checkinday)._d;
+	if (!isEmpty(personal.checkinday)) {
+		const checkinday = moment().day(personal.checkinday)._d;
+		let getDate = determineCorrespondingCheckin(personal, checkinday, true);
 
-	if (!isUndefined(checkinday)) {
-		let getDate = determineCorrespondingCheckin(personal, checkinday);
 		getDate = moment(getDate).format('dddd, MMMM Do');
 		nextCheckIn =
 			getDate === moment().format('dddd, MMMM Do')
