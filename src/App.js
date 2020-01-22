@@ -23,111 +23,111 @@ const drawerWidth = 240;
 
 //Will need to come back and add Redux to manage state when drawer is open to shift main's contents
 const useStyles = makeStyles(theme => ({
-  root: {
-    display: 'flex'
-  },
-  drawerHeader: {
-    display: 'flex',
-    alignItems: 'center',
-    padding: theme.spacing(0, 1),
-    ...theme.mixins.toolbar,
-    justifyContent: 'flex-end'
-  },
-  content: {
-    flexGrow: 1,
-    padding: theme.spacing(3),
-    transition: theme.transitions.create('margin', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen
-    }),
-    marginLeft: -drawerWidth
-  },
-  contentShift: {
-    transition: theme.transitions.create('margin', {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen
-    }),
-    marginLeft: 0
-  }
+	root: {
+		display: 'flex',
+	},
+	drawerHeader: {
+		display: 'flex',
+		alignItems: 'center',
+		padding: theme.spacing(0, 1),
+		...theme.mixins.toolbar,
+		justifyContent: 'flex-end',
+	},
+	content: {
+		flexGrow: 1,
+		padding: theme.spacing(3),
+		transition: theme.transitions.create('margin', {
+			easing: theme.transitions.easing.sharp,
+			duration: theme.transitions.duration.leavingScreen,
+		}),
+		marginLeft: -drawerWidth,
+	},
+	contentShift: {
+		transition: theme.transitions.create('margin', {
+			easing: theme.transitions.easing.easeOut,
+			duration: theme.transitions.duration.enteringScreen,
+		}),
+		marginLeft: 0,
+	},
 }));
 
 class App extends Component {
-  constructor(props) {
-    super(props);
+	constructor(props) {
+		super(props);
 
-    this.state = {
-      personal: {},
-      goals: {}
-    };
-  }
-  async componentDidMount() {
-    try {
-      const clientInfo = await axios.get(
-        `http://${process.env.REACT_APP_BACKEND_IP}:5000/clients/5de92ab896558099cbcdbdde`
-      );
+		this.state = {
+			personal: {},
+			goals: {},
+		};
+	}
+	async componentDidMount() {
+		try {
+			const clientInfo = await axios.get(
+				`http://${process.env.REACT_APP_BACKEND_IP}:5000/clients/5dee532f975664ad3bd47094`,
+			);
 
-      const clientGoals = await axios.get(
-        `http://${process.env.REACT_APP_BACKEND_IP}:5000/clients/goals/${clientInfo.data._id}`
-      );
+			const clientGoals = await axios.get(
+				`http://${process.env.REACT_APP_BACKEND_IP}:5000/clients/goals/${clientInfo.data._id}`,
+			);
 
-      this.setState({
-        personal: clientInfo.data,
-        goals: clientGoals.data
-      });
+			this.setState({
+				personal: clientInfo.data,
+				goals: clientGoals.data,
+			});
 
-      console.log(this.state);
-    } catch (error) {
-      console.log(error);
-    }
-  }
+			console.log(this.state);
+		} catch (error) {
+			console.log(error);
+		}
+	}
 
-  render() {
-    return (
-      <div className='App'>
-        <Router>
-          <ClientNav />
-          <main className='main-page-container'>
-            <Route
-              exact
-              path='/'
-              render={props => <ClientMain client={this.state} />}
-            />
-            <Route
-              path='/profile'
-              render={props => <Profile client={this.state.personal} />}
-            />
-            <Route
-              path='/weight'
-              render={props => (
-                <WeightLogPage client={this.state.personal} type='weight' />
-              )}
-            />
-            <Route
-              path='/macros'
-              render={props => (
-                <MacrosLogPage
-                  client={this.state.personal}
-                  goals={this.state.goals}
-                  type='macros'
-                />
-              )}
-            />
-            <Route
-              path='/exercise'
-              render={props => (
-                <LogPage client={this.state.personal} type='exercise' />
-              )}
-            />
-            <Route path='/measurements' component={Measurements} />
-            <Route
-              path='/check-in'
-              render={props => <CheckIn client={this.state.personal} />}
-            />
-          </main>
-        </Router>
-      </div>
-    );
-  }
+	render() {
+		return (
+			<div className='App'>
+				<Router>
+					<ClientNav />
+					<main className='main-page-container'>
+						<Route
+							exact
+							path='/'
+							render={props => <ClientMain client={this.state} />}
+						/>
+						<Route
+							path='/profile'
+							render={props => <Profile client={this.state.personal} />}
+						/>
+						<Route
+							path='/weight'
+							render={props => (
+								<WeightLogPage client={this.state.personal} type='weight' />
+							)}
+						/>
+						<Route
+							path='/macros'
+							render={props => (
+								<MacrosLogPage
+									client={this.state.personal}
+									goals={this.state.goals}
+									type='macros'
+								/>
+							)}
+						/>
+						<Route
+							path='/exercise'
+							render={props => (
+								<LogPage client={this.state.personal} type='exercise' />
+							)}
+						/>
+						<Route path='/measurements' component={Measurements} />
+						<Route
+							path='/check-in'
+							render={props => <CheckIn client={this.state.personal} />}
+						/>
+					</main>
+				</Router>
+			</div>
+		);
+	}
 }
 
 export default App;
