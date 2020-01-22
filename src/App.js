@@ -92,7 +92,10 @@ class App extends Component {
               path='/'
               render={props => <ClientMain client={this.state} />}
             />
-            <Route path='/profile' component={Profile} />
+            <Route
+              path='/profile'
+              render={props => <Profile client={this.state.personal} />}
+            />
             <Route
               path='/weight'
               render={props => (
