@@ -28,5 +28,11 @@
         "label": " Notes",
         "minWidth": 100,
         "sort": false
+    },
+    {
+        "id": "exercise-log-edit",
+        "label": "Update",
+        "minWidth": 100,
+        "sort": false
     }
 ]

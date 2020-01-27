@@ -13,7 +13,7 @@ import Measurements from './components/Measurements/Measurements';
 import Profile from './components/ClientProfile/Profile';
 
 //Used for Weight, Macros, Exercise Logs
-import LogPage from './components/LogPage/LogPage';
+import ExerciseLogPage from './components/ExerciseLog/ExerciseLogPage';
 import WeightLogPage from './components/WeightLog/WeightLogPage';
 import MacrosLogPage from './components/MacrosLog/MacrosLogPage';
 
@@ -115,7 +115,7 @@ class App extends Component {
 						<Route
 							path='/exercise'
 							render={props => (
-								<LogPage client={this.state.personal} type='exercise' />
+								<ExerciseLogPage client={this.state.personal} type='exercise' />
 							)}
 						/>
 						<Route path='/measurements' component={Measurements} />
