@@ -9,47 +9,26 @@ import TableContainer from '@material-ui/core/TableContainer';
 
 import LogTable from '../LogPage/LogTable';
 
-export default function ExerciseLogPage({ client, goals, type }) {
+export default function ExerciseLogPage({ client, type }) {
 	const [rows, setRows] = useState([]);
 
 	useEffect(() => {
 		async function fetchData() {
-			let [macros, goals] = await axios.all([
-				getAllMacrosEntries(client, type),
-				getAllGoalsEntries(client),
-			]);
+			let exercise = await axios.get(
+				`http://${process.env.REACT_APP_BACKEND_IP}:5000/${type}/${type}-log/${client._id}`,
+			);
 
-			macros.data.forEach((elem, index) => {
-				let macros = find(goals.data, { startofweek: elem.startofweek });
-				elem = merge(elem, macros);
-				elem.unique = index;
-			});
-
-			const orderedEntries = orderBy(macros.data, ['date'], ['desc']);
+			const orderedEntries = orderBy(exercise.data, ['date'], ['desc']);
 			orderedEntries.forEach(entry => {
 				entry.displayDate = createDisplayDate(entry.date);
 				entry.editable = false;
 			});
-
-			console.log(orderedEntries);
 
 			setRows(orderedEntries);
 		}
 
 		fetchData();
 	}, [client, type]);
-
-	const getAllMacrosEntries = (client, type) => {
-		return axios.get(
-			`http://${process.env.REACT_APP_BACKEND_IP}:5000/${type}/${type}-log/${client._id}`,
-		);
-	};
-
-	const getAllGoalsEntries = (client, type) => {
-		return axios.get(
-			`http://${process.env.REACT_APP_BACKEND_IP}:5000/clients/goals-log/${client._id}`,
-		);
-	};
 
 	const renderTables = () => {
 		let groupedEntries = groupBy(rows, 'startofweek');
