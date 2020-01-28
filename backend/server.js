@@ -16,29 +16,31 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 mongoose.connect(url, {
-  useNewUrlParser: true,
-  useCreateIndex: true,
-  useFindAndModify: false
+	useNewUrlParser: true,
+	useCreateIndex: true,
+	useFindAndModify: false,
 });
 const connection = mongoose.connection;
 connection.once('open', () => {
-  console.log('MongoDB database connection established successfully');
+	console.log('MongoDB database connection established successfully');
 });
 
 connection.on('error', err => {
-  console.error('Error: ', err);
+	console.error('Error: ', err);
 });
 
 const clientsRouter = require('./routes/clients');
 const exerciseRouter = require('./routes/exercise');
 const macrosRouter = require('./routes/macros');
+const measurementsRouter = require('./routes/measurements');
 const weightRouter = require('./routes/weight');
 
 app.use('/clients', clientsRouter);
 app.use('/exercise', exerciseRouter);
 app.use('/macros', macrosRouter);
+app.use('/measurements', measurementsRouter);
 app.use('/weight', weightRouter);
 
 app.listen(port, () => {
-  console.log(`Server is running on port: ${port}`);
+	console.log(`Server is running on port: ${port}`);
 });

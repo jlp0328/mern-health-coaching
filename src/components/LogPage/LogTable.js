@@ -9,11 +9,13 @@ import TableRow from '@material-ui/core/TableRow';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 
 import MacrosTableBody from '../MacrosLog/MacrosTableBody';
+import MeasurementsTableBody from '../Measurements/MeasurementsTableBody';
 import WeightTableBody from '../WeightLog/WeightTableBody';
 import ExerciseTableBody from '../ExerciseLog/ExerciseTableBody';
 
 //Columns
 import macrosColumns from './data/macro-columns.json';
+import measurementColumns from './data/measurements-columns.json';
 import exerciseColumns from './data/exercise-columns.json';
 import weightColumns from './data/weight-columns.json';
 
@@ -29,6 +31,7 @@ export default function LogTable({ rows, type }) {
 	columnHeaders.set('weight', weightColumns);
 	columnHeaders.set('macros', macrosColumns);
 	columnHeaders.set('exercise', exerciseColumns);
+	columnHeaders.set('measurements', measurementColumns);
 
 	const calculateWeeklyWeightAvg = () => {
 		let weightOnly = [];
@@ -48,6 +51,7 @@ export default function LogTable({ rows, type }) {
 	);
 	tableType.set('macros', <MacrosTableBody rows={data} />);
 	tableType.set('exercise', <ExerciseTableBody rows={data} />);
+	tableType.set('measurements', <MeasurementsTableBody rows={data} />);
 
 	useEffect(() => {
 		setData(rows);

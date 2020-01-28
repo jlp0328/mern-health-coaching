@@ -10,7 +10,7 @@ import Fab from '@material-ui/core/Fab';
 import Button from '@material-ui/core/Button';
 import EditIcon from '@material-ui/icons/Edit';
 
-export default function WeightTableBodyAvg({ rows, average }) {
+export default function WeightTableBody({ rows, average }) {
 	const [entries, setEntries] = useState([]);
 
 	useEffect(() => {

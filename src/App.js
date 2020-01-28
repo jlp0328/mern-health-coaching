@@ -16,6 +16,7 @@ import Profile from './components/ClientProfile/Profile';
 import ExerciseLogPage from './components/ExerciseLog/ExerciseLogPage';
 import WeightLogPage from './components/WeightLog/WeightLogPage';
 import MacrosLogPage from './components/MacrosLog/MacrosLogPage';
+import MeasurementsLogPage from './components/Measurements/MeasurementsLogPage';
 
 import './App.css';
 
@@ -118,7 +119,15 @@ class App extends Component {
 								<ExerciseLogPage client={this.state.personal} type='exercise' />
 							)}
 						/>
-						<Route path='/measurements' component={Measurements} />
+						<Route
+							path='/measurements'
+							render={props => (
+								<MeasurementsLogPage
+									client={this.state.personal}
+									type='measurements'
+								/>
+							)}
+						/>
 						<Route
 							path='/check-in'
 							render={props => <CheckIn client={this.state.personal} />}

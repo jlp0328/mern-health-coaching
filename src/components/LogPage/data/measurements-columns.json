@@ -1,0 +1,56 @@
+[
+    {
+        "id": "measurements-log-date",
+        "label": "Date",
+        "minWidth": 170,
+        "sort": true
+    },
+    {
+        "id": "measurements-log-weight",
+        "label": "Weight",
+        "minWidth": 100,
+        "sort": false
+    },
+    {
+        "id": "measurements-log-rightarm",
+        "label": "Right Arm",
+        "minWidth": 100,
+        "sort": false
+    },
+    {
+        "id": "measurements-log-rightleg",
+        "label": "Right Leg",
+        "minWidth": 100,
+        "sort": false
+    },
+    {
+        "id": "measurements-log-hips",
+        "label": "Hips",
+        "minWidth": 100,
+        "sort": false
+    },
+    {
+        "id": "measurements-log-waist",
+        "label": "Waist",
+        "minWidth": 100,
+        "sort": false
+    },
+    {
+        "id": "measurements-log-bust",
+        "label": "Bust",
+        "minWidth": 100,
+        "sort": false
+    },
+    {
+        "id": "measurements-log-bodyfat",
+        "label": "Body Fat",
+        "minWidth": 100,
+        "sort": false
+    },
+    {
+        "id": "measurements-log-other",
+        "label": "Other",
+        "minWidth": 100,
+        "sort": false
+    }
+]
